@@ -1,7 +1,7 @@
 {
-  "name": "es2015-library-skeleton",
+  "name": "apollo-alchemy",
   "version": "0.0.0-development",
-  "description": "my personal ES2015 library project skeleton",
+  "description": "magically refetches relevant queries after creates and deletes",
   "main": "index.js",
   "module": "es/index.js",
   "modules.root": "es",
@@ -44,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jedwards1211/es2015-library-skeleton.git"
+    "url": "https://github.com/jcoreio/apollo-alchemy.git"
   },
   "keywords": [
     "es2015"
@@ -52,9 +52,9 @@
   "author": "Andy Edwards",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jedwards1211/es2015-library-skeleton/issues"
+    "url": "https://github.com/jcoreio/apollo-alchemy/issues"
   },
-  "homepage": "https://github.com/jedwards1211/es2015-library-skeleton#readme",
+  "homepage": "https://github.com/jcoreio/apollo-alchemy#readme",
   "devDependencies": {
     "@commitlint/cli": "^6.0.2",
     "@commitlint/config-conventional": "^6.0.2",

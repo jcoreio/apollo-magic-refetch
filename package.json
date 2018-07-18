@@ -103,6 +103,9 @@
     "semantic-release": "^15.8.0",
     "travis-deploy-once": "^5.0.1"
   },
+  "optionalDependencies": {
+    "babel-runtime": "^6.23.0"
+  },
   "peerDependencies": {
     "apollo-client": "^2.3.0",
     "graphql": "*"

@@ -154,12 +154,12 @@ The `ApolloClient` in which to scan active queries.
 
 The `__typename` of the GraphQL type that was created or deleted.
 
-##### `ids: any (*optional*)`
+##### `ids: any` (*optional*)
 
 A single id, an array of ids, or a `Set` of ids that were deleted.  If given,
 only active queries whose current result contains an object with the given
 `typename` and `id` will be refetched.
 
-##### `idField: string (*optional, default*: 'id')`
+##### `idField: string` (*optional, default*: `'id'`)
 
 The name of the id field in the type that was deleted.

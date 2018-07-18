@@ -26,7 +26,7 @@ export default async function refetch(client: ApolloClient, typename: string, id
       const currentResult = observableQuery.currentResult()
       if (currentResult) data = currentResult.data
     }
-    if (doesQueryContain(document, types.Query, typename, data, finalIds, idField)) {
+    if (doesQueryContain(document, types, typename, data, finalIds, idField)) {
       promises.push(observableQuery.refetch())
     }
   }

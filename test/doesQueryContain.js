@@ -19,14 +19,14 @@ describe(`doesQueryContain`, function () {
         id: 1
       }
     }
-    expect(doesQueryContain(document, types.Query, 'Device')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'DeviceConnection')).to.be.false
-    expect(doesQueryContain(document, types.Query, 'Organization')).to.be.false
-    expect(doesQueryContain(document, types.Query, 'User')).to.be.false
+    expect(doesQueryContain(document, types, 'Device')).to.be.true
+    expect(doesQueryContain(document, types, 'DeviceConnection')).to.be.false
+    expect(doesQueryContain(document, types, 'Organization')).to.be.false
+    expect(doesQueryContain(document, types, 'User')).to.be.false
 
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([1]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([1, 2]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([2]))).to.be.false
+    expect(doesQueryContain(document, types, 'Device', data, new Set([1]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([1, 2]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([2]))).to.be.false
   })
   it(`connection test`, function () {
     const document = gql`{
@@ -46,17 +46,17 @@ describe(`doesQueryContain`, function () {
         ]
       }
     }
-    expect(doesQueryContain(document, types.Query, 'Device')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'DeviceConnection')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'DeviceEdge')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Organization')).to.be.false
-    expect(doesQueryContain(document, types.Query, 'OrganizationConnection')).to.be.false
-    expect(doesQueryContain(document, types.Query, 'User')).to.be.false
+    expect(doesQueryContain(document, types, 'Device')).to.be.true
+    expect(doesQueryContain(document, types, 'DeviceConnection')).to.be.true
+    expect(doesQueryContain(document, types, 'DeviceEdge')).to.be.true
+    expect(doesQueryContain(document, types, 'Organization')).to.be.false
+    expect(doesQueryContain(document, types, 'OrganizationConnection')).to.be.false
+    expect(doesQueryContain(document, types, 'User')).to.be.false
 
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([1]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([2]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([1, 2]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([3]))).to.be.false
+    expect(doesQueryContain(document, types, 'Device', data, new Set([1]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([2]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([1, 2]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([3]))).to.be.false
   })
   it(`more complex test`, function () {
     const document = gql`{
@@ -103,22 +103,22 @@ describe(`doesQueryContain`, function () {
         ],
       }
     }
-    expect(doesQueryContain(document, types.Query, 'Device')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'DeviceConnection')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'DeviceEdge')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Organization')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'OrganizationConnection')).to.be.true
-    expect(doesQueryContain(document, types.Query, 'User')).to.be.false
+    expect(doesQueryContain(document, types, 'Device')).to.be.true
+    expect(doesQueryContain(document, types, 'DeviceConnection')).to.be.true
+    expect(doesQueryContain(document, types, 'DeviceEdge')).to.be.true
+    expect(doesQueryContain(document, types, 'Organization')).to.be.true
+    expect(doesQueryContain(document, types, 'OrganizationConnection')).to.be.true
+    expect(doesQueryContain(document, types, 'User')).to.be.false
 
-    expect(doesQueryContain(document, types.Query, 'Organization', data, new Set([1]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Organization', data, new Set([1, 2]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Organization', data, new Set([3]))).to.be.false
+    expect(doesQueryContain(document, types, 'Organization', data, new Set([1]))).to.be.true
+    expect(doesQueryContain(document, types, 'Organization', data, new Set([1, 2]))).to.be.true
+    expect(doesQueryContain(document, types, 'Organization', data, new Set([3]))).to.be.false
 
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([1]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([2]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([1, 2]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([3]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([4]))).to.be.true
-    expect(doesQueryContain(document, types.Query, 'Device', data, new Set([5]))).to.be.false
+    expect(doesQueryContain(document, types, 'Device', data, new Set([1]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([2]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([1, 2]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([3]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([4]))).to.be.true
+    expect(doesQueryContain(document, types, 'Device', data, new Set([5]))).to.be.false
   })
 })

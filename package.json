@@ -1,5 +1,5 @@
 {
-  "name": "apollo-alchemy",
+  "name": "apollo-magic-refetch",
   "version": "0.0.0-development",
   "description": "magically refetches relevant queries after creates and deletes",
   "main": "index.js",
@@ -16,6 +16,7 @@
     "clean": "rimraf es lib $(cd src; ls) *.js.flow",
     "build": "npm run clean && babel src --out-dir es && flow-copy-source -v src/ es && BABEL_ENV=es5 babel src --out-dir . && flow-copy-source -v src/ .",
     "test": "NODE_ENV=production BABEL_ENV=es5 mocha $npm_package_config_mocha && NODE_ENV=production BABEL_ENV=coverage nyc --reporter=lcov --reporter=text mocha $npm_package_config_mocha",
+    "test:debug": "NODE_ENV=production BABEL_ENV=test mocha --inspect-brk $npm_package_config_mocha",
     "test:watch": "NODE_ENV=production BABEL_ENV=test mocha --watch $npm_package_config_mocha",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov; codecov",
     "commitmsg": "commitlint -e $GIT_PARAMS",
@@ -44,7 +45,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jcoreio/apollo-alchemy.git"
+    "url": "https://github.com/jcoreio/apollo-magic-refetch.git"
   },
   "keywords": [
     "es2015"
@@ -52,15 +53,18 @@
   "author": "Andy Edwards",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jcoreio/apollo-alchemy/issues"
+    "url": "https://github.com/jcoreio/apollo-magic-refetch/issues"
   },
-  "homepage": "https://github.com/jcoreio/apollo-alchemy#readme",
+  "homepage": "https://github.com/jcoreio/apollo-magic-refetch#readme",
   "devDependencies": {
     "@commitlint/cli": "^6.0.2",
     "@commitlint/config-conventional": "^6.0.2",
     "@jedwards1211/commitlint-config": "^1.0.0",
     "@jedwards1211/eslint-config": "^2.0.0",
     "@jedwards1211/eslint-config-flow": "^1.0.0",
+    "apollo-cache-inmemory": "^1.2.5",
+    "apollo-client": "^2.3.5",
+    "apollo-link-schema": "^1.1.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -84,6 +88,7 @@
     "flow-bin": "^0.76.0",
     "flow-copy-source": "^1.2.1",
     "flow-watch": "^1.1.0",
+    "graphql-tools": "^3.0.5",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "mocha": "^4.1.0",
@@ -91,5 +96,9 @@
     "rimraf": "^2.6.0",
     "semantic-release": "^15.1.4",
     "travis-deploy-once": "^4.3.1"
+  },
+  "dependencies": {
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2"
   }
 }

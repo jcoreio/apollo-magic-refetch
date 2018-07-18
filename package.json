@@ -93,6 +93,7 @@
     "flow-bin": "^0.76.0",
     "flow-copy-source": "^1.2.1",
     "flow-watch": "^1.1.0",
+    "graphql": "^0.13.2",
     "graphql-tools": "^3.0.5",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
@@ -102,8 +103,11 @@
     "semantic-release": "^15.8.0",
     "travis-deploy-once": "^5.0.1"
   },
+  "peerDependencies": {
+    "apollo-client": "^2.3.0",
+    "graphql": "*"
+  },
   "dependencies": {
-    "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2"
   }
 }

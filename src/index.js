@@ -14,7 +14,7 @@ function normalizeIds(ids: any): Set<any> {
 export default async function refetch(client: ApolloClient, typename: string, ids?: ?any, idField?: string = 'id'): Promise<any> {
   const types: Types = await getSchemaTypes(client)
 
-  const finalIds = ids ? normalizeIds(ids) : null
+  const finalIds = ids != null ? normalizeIds(ids) : null
 
   const {queryManager: {queries}} = client
   let promises = []

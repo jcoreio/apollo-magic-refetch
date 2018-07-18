@@ -33,19 +33,35 @@ export type Types = {[name: string]: Type}
 
 let promise: ?Promise<Types>
 
+
+function convertRawField({name, type}: RawField): Field {
+  return ({name, type: convertRawType(type)}: any)
+}
+
+function convertRawFields(fields: Array<RawField>): {[name: string]: Field} {
+  const convertedFields = {}
+  for (let field of fields) {
+    convertedFields[field.name] = (convertRawField(field): any)
+  }
+  return convertedFields
+}
+
+function convertRawType({name, kind, ofType, fields}: RawType): Type {
+  return {
+    name,
+    kind,
+    ofType: ofType ? convertRawType(ofType) : null,
+    fields: fields ? convertRawFields(fields) : null,
+  }
+}
+
 export function linkTypes(rawTypes: Array<RawType>): Types {
   const types: Types = {}
+
   for (let rawType of rawTypes) {
-    const {name, kind, ofType, fields} = rawType
+    const {name} = rawType
     if (name) {
-      const type = types[name] = {name, kind}
-      if (ofType) type.ofType = (ofType: any)
-      if (fields) {
-        type.fields = {}
-        for (let field of fields) {
-          type.fields[field.name] = field
-        }
-      }
+      types[name] = convertRawType(rawType)
     }
   }
   function resolveType(type: Type, parent: ?Field): Type {

@@ -28,7 +28,7 @@ Until that happens, this is probably your best bet!
 * [Handling associations being broken](#handling-associations-being-broken)
 * [Handling associations being created](#handling-associations-being-created)
 * [API](#api)
-  + [`refetch(client, typename, [ids], [idField])`](#refetchclient-typename-ids-idfield)
+  + [`refetch(client, typenameOrTerms, [ids], [idField])`](#refetchclient-typenameorterms-ids-idfield)
 
 ## How it works
 
@@ -304,7 +304,7 @@ const CreateUserFormContainer = ({organizationId}) => (
 
 ## API
 
-### `refetch(client, typename, [ids], [idField])`
+### `refetch(client, typenameOrTerms, [ids], [idField])`
 
 #### Arguments
 

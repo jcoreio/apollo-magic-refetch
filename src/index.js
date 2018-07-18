@@ -11,10 +11,31 @@ function normalizeIds(ids: any): Set<any> {
   return new Set([ids])
 }
 
-export default async function refetch(client: ApolloClient, typename: string, ids?: ?any, idField?: string = 'id'): Promise<any> {
+type Term = [string, any, ?string] | [string, any] | [string]
+
+function every<T>(array: $ReadOnlyArray<T>, predicate: (elem: T) => boolean): boolean {
+  for (let elem of array) {
+    if (!predicate(elem)) return false
+  }
+  return true
+}
+
+export default async function refetch(
+  client: ApolloClient,
+  typenameOrTerms: string | $ReadOnlyArray<Term>,
+  ids?: ?any,
+  idField?: string
+): Promise<any> {
   const types: Types = await getSchemaTypes(client)
 
-  const finalIds = ids != null ? normalizeIds(ids) : null
+  let terms
+  if (typeof typenameOrTerms === 'string') {
+    terms = [[typenameOrTerms, ids, idField]]
+  } else if (Array.isArray(typenameOrTerms)) {
+    terms = typenameOrTerms
+  } else {
+    throw new Error(`invalid typename or terms: ${typenameOrTerms}`)
+  }
 
   const {queryManager: {queries}} = client
   let promises = []
@@ -22,11 +43,19 @@ export default async function refetch(client: ApolloClient, typename: string, id
     const {document, observableQuery} = query
     if (!observableQuery) continue
     let data
-    if (finalIds) {
-      const currentResult = observableQuery.currentResult()
-      if (currentResult) data = currentResult.data
-    }
-    if (doesQueryContain(document, types, typename, data, finalIds, idField)) {
+    const currentResult = observableQuery.currentResult()
+    if (currentResult) data = currentResult.data
+
+    if (every(terms, ([typename, ids, idField]: any) =>
+      doesQueryContain(
+        document,
+        types,
+        typename,
+        data,
+        ids != null ? normalizeIds(ids) : null,
+        idField || 'id'
+      )
+    )) {
       promises.push(observableQuery.refetch())
     }
   }

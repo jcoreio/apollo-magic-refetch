@@ -90,7 +90,12 @@ describe(`integration test`, function () {
         id: 3,
         username: 'bobilly',
         organizationIds: [2],
-      }]
+      }],
+      [4, {
+        id: 4,
+        username: 'saget',
+        organizationIds: [],
+      }],
     ])
 
     const schema = makeExecutableSchema({
@@ -106,7 +111,17 @@ describe(`integration test`, function () {
     })
   })
 
-  it(`basic test`, async function (): Promise<void> {
+  it(`throws when invalid typenameOrTerms is given`, async function (): Promise<void> {
+    let error
+    try {
+      await refetch(client, (2: any))
+    } catch (err) {
+      error = err
+    }
+    expect(error).to.exist
+  })
+
+  it(`handles deleted User`, async function (): Promise<void> {
     const query = gql`{
       orgs: Organizations {
         id
@@ -129,13 +144,103 @@ describe(`integration test`, function () {
       org.userIds = org.userIds.filter(id => id !== 2)
     }
 
-    await refetch(client, 'User', 2)
+    await refetch(client, 'User', [2])
 
     const {data: {orgs: finalOrgs}} = await observableQuery.currentResult()
 
     expect(finalOrgs.map(({Users}) => Users.map(({id}) => id))).to.deep.equal([
       [1],
       [3],
+    ])
+  })
+  it(`handles User removed from org`, async function (): Promise<void> {
+    const query = gql`{
+      orgs: Organizations {
+        id
+        name
+        Users {
+          id
+          username
+        }
+      }
+    }`
+
+    const usersQuery = gql`{
+      Users {
+        id
+        username
+      }
+    }`
+
+    const observableQuery = client.watchQuery({query})
+    observableQuery.subscribe({})
+    await observableQuery.refetch()
+
+    const observableUsersQuery = client.watchQuery({query: usersQuery})
+    observableUsersQuery.subscribe({})
+    await observableUsersQuery.refetch()
+
+    const {data: {orgs}} = await observableQuery.currentResult()
+    expect(orgs.map(({id}) => id)).to.deep.equal([...Organizations.keys()]);
+
+    (Users.get(2): any).organizationIds = [1];
+    (Organizations.get(2): any).userIds = [3]
+
+    await refetch(client, [
+      ['User', 2],
+      ['Organization', 2],
+    ])
+
+    const {data: {orgs: finalOrgs}} = await observableQuery.currentResult()
+
+    expect(finalOrgs.map(({Users}) => Users.map(({id}) => id))).to.deep.equal([
+      [1, 2],
+      [3],
+    ])
+  })
+  it(`handles User added to org`, async function (): Promise<void> {
+    const query = gql`{
+      orgs: Organizations {
+        id
+        name
+        Users {
+          id
+          username
+        }
+      }
+    }`
+
+    const usersQuery = gql`{
+      Users {
+        id
+        username
+      }
+    }`
+
+    const observableQuery = client.watchQuery({query})
+    observableQuery.subscribe({})
+    await observableQuery.refetch()
+
+    const observableUsersQuery = client.watchQuery({query: usersQuery})
+    observableUsersQuery.subscribe({})
+    await observableUsersQuery.refetch()
+
+    const {data: {orgs}} = await observableQuery.currentResult()
+    expect(orgs.map(({id}) => id)).to.deep.equal([...Organizations.keys()]);
+
+    (Users.get(4): any).organizationIds.push(2);
+    (Organizations.get(2): any).userIds.push(4)
+
+    await refetch(client, [
+      ['User'],
+      ['Organization', new Set([2])],
+    ])
+
+    const {data: {orgs: finalOrgs}} = await observableQuery.currentResult()
+
+    expect(finalOrgs.map(({Users}) => Users.map(({id}) => id))).to.deep.equal([
+      [1, 2],
+      [2, 3, 4],
     ])
   })
 })

@@ -5,7 +5,8 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-Handling Apollo cache updates after creating and deleting objects remains a
+Handling Apollo cache updates after creating and deleting objects, or
+associating and dissociating objects, remains a
 [poorly solved problem](https://github.com/apollographql/apollo-client/issues/899).
 `update` and `refetchQueries` props on `Mutation`s couple different areas of
 your app in a way you probably don't want, and they don't scale well as you add
@@ -15,6 +16,19 @@ Truly solving the problem will probably require changes to the apollo client
 and cache code.
 
 Until that happens, this is probably your best bet!
+
+# Table of Contents
+
+* [How it works](#how-it-works)
+* [Current limitations](#current-limitations)
+* [ES environment requirements](#es-environment-requirements)
+* [Type metadata usage](#type-metadata-usage)
+* [Handling Deletions](#handling-deletions)
+* [Handling Creation](#handling-creation)
+* [Handling associations being broken](#handling-associations-being-broken)
+* [Handling associations being created](#handling-associations-being-created)
+* [API](#api)
+  + [`refetch(client, typename, [ids], [idField])`](#refetchclient-typename-ids-idfield)
 
 ## How it works
 
@@ -140,6 +154,154 @@ const CreateDeviceFormContainer = () => (
 )
 ```
 
+## Handling associations being broken
+
+In this example, a view shows a list of `Organization`s, each containing a
+sublist of `User`s.  When one or more users is removed from an organization,
+it makes the following call:
+```js
+refetch(client, [
+  ['User', userIds],
+  ['Organization', organizationId],
+])
+```
+Passing an array to `refetch` means to only refetch queries containing all of
+the conditions in the array.  So the query below would be refetched, but a query
+containing only `Organizations` or a query containing only `User`s would not.
+
+```js
+import * as React from 'react'
+import gql from 'graphql-tag'
+import refetch from 'apollo-magic-refetch'
+import {Mutation, ApolloConsumer} from 'react-apollo'
+import OrganizationView from './OrganizationView'
+
+const query = gql`
+query {
+  Organizations {
+    id
+    name
+    Users {
+      id
+      username
+    }
+  }
+}
+`
+
+const mutation = gql`
+mutation removeUsersFromOrganization($organizationId: Int!, $userIds: [Int!]!) {
+  result: removeUsersFromOrganization(organizationId: $organizationId, userIds: $userIds) {
+    organizationId
+    userIds
+  }
+}
+`
+
+const OrganizationViewContainer = ({organization: {id, name, Users}}) => (
+  <ApolloConsumer>
+    {client => (
+      <Mutation
+        mutation={mutation}
+        update={(cache, {data: {result: {organizationId, userIds}}}) =>
+          refetch(client, [
+            ['User', userIds],
+            ['Organization', organizationId],
+          ])
+        }
+      >
+        {removeUsersFromOrganization => (
+          <OrganizationView
+            organization={organization}
+            onRemoveUsers={userIds => removeUsersFromOrganization({
+              variables: {organizationId, userIds},
+            })}
+          />
+        )}
+      </Mutation>
+    )}
+  </ApolloConsumer>
+)
+
+const OrganizationsViewContainer = () => (
+  <Query query={query}>
+    {({data}) => {
+      const {Organizations} = data || {}
+      if (!Organizations) return <div />
+      return (
+        <div>
+          <h1>Organizations</h1>
+          {Organizations.map((organization) => (
+            <OrganizationViewContainer
+              key={organization.id}
+              organization={organization}
+            />
+          )}
+        </div>
+      )
+    }}
+  </Query>
+)
+```
+
+## Handling associations being created
+
+Assuming the same `Organization`s/`User`s schema as above, the example performs
+the necessary refetches when a user is created and added to an organization:
+```js
+refetch(client, [
+  ['User'],
+  ['Organization', organizationId],
+])
+```
+In this case no `ids` are given for `User`, so any query containing the an
+`Organization` with the given `organizationId` in its results and selecting any
+`User`s would be refetched.  (This doesn't perfectly exclude cases that fetch
+Users and Organizations separately, instead of one nested inside the other, but
+it's better than nothing).
+
+```js
+import * as React from 'react'
+import gql from 'graphql-tag'
+import refetch from 'apollo-magic-refetch'
+import {Mutation, ApolloConsumer} from 'react-apollo'
+import CreateUserForm from './CreateUserForm'
+
+const mutation = gql`
+mutation createUser($organizationId: Int!, $values: CreateUser!) {
+  result: createUser(organizationId: $organizationId, values: $values) {
+    organizationId
+    id
+    username
+  }
+}
+`
+
+const CreateUserFormContainer = ({organizationId}) => (
+  <ApolloConsumer>
+    {client => (
+      <Mutation
+        mutation={mutation}
+        update={() =>
+          refetch(client, [
+            ['User'],
+            ['Organization', organizationId],
+          ])
+        }
+      >
+        {createUser => (
+          <CreateUserForm
+            onSubmit={values => createUser({
+              variables: {organizationId, values},
+            })}
+          />
+        )}
+      </Mutation>
+    )}
+  </ApolloConsumer>
+)
+```
+
 ## API
 
 ### `refetch(client, typename, [ids], [idField])`
@@ -150,9 +312,12 @@ const CreateDeviceFormContainer = () => (
 
 The `ApolloClient` in which to scan active queries.
 
-##### `typename: string`
+##### `typenameOrTerms: string | Array<Term>`
 
-The `__typename` of the GraphQL type that was created or deleted.
+The `__typename` of the GraphQL type that was created or deleted, or an array of
+`[typename, ids, idField]` tuples (`ids` and `idField` are optional).  If an
+array is given, a query must match all of the conditions in the array to be
+refetched.
 
 ##### `ids: any (*optional*)`
 

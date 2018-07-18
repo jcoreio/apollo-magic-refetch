@@ -40,10 +40,19 @@ anywhere in your results, this library may fail to refetch when it should.
 Also, lists of lists are not supported, if for whatever reason you are using
 lists of lists in your schema (I haven't even checked if this is possible).
 
-## Installation
+## Type metadata usage
 
-```sh
-npm install --save apollo-magic-refetch
+`apollo-match-refetch` uses type metadata that it must fetch from GraphQL.
+If your schema is large enough it may be a prohibitive amount of metadata.
+`refetch` operations will be delayed until this metadata is fetched.
+To prefetch this metadata, do:
+
+```js
+import client from './wherever/you/create/your/apollo/client'
+import getSchemaTypes from 'apollo-magic-refetch/getSchemaTypes'
+
+// initiate the prefetch
+getSchemaTypes(client)
 ```
 
 ## Handling Deletions

@@ -48,7 +48,12 @@
     "url": "https://github.com/jcoreio/apollo-magic-refetch.git"
   },
   "keywords": [
-    "es2015"
+    "apollo",
+    "apollo-client",
+    "apollographql",
+    "cache-invalidation",
+    "graphql",
+    "refetch"
   ],
   "author": "Andy Edwards",
   "license": "MIT",

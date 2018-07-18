@@ -40,6 +40,14 @@ anywhere in your results, this library may fail to refetch when it should.
 Also, lists of lists are not supported, if for whatever reason you are using
 lists of lists in your schema (I haven't even checked if this is possible).
 
+## ES environment requirements
+
+If you are building for legacy browsers with a bundler like Webpack, make sure
+to add a rule to transpile this package to ES5.
+
+If you are not using a bundler that supports the `modules.root` property in
+`package.json`, make sure to install `babel-runtime`.
+
 ## Type metadata usage
 
 `apollo-match-refetch` uses type metadata that it must fetch from GraphQL.

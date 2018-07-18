@@ -50,7 +50,7 @@ If you are not using a bundler that supports the `modules.root` property in
 
 ## Type metadata usage
 
-`apollo-match-refetch` uses type metadata that it must fetch from GraphQL.
+`apollo-magic-refetch` uses type metadata that it must fetch from GraphQL.
 If your schema is large enough it may be a prohibitive amount of metadata.
 `refetch` operations will be delayed until this metadata is fetched.
 To prefetch this metadata, do:

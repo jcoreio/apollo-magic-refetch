@@ -8,6 +8,20 @@ import gql from 'graphql-tag'
 import doesQueryContain from '../src/doesQueryContain'
 
 describe(`doesQueryContain`, function () {
+  it(`throws if type is not found`, function () {
+    const document = gql`{
+      Device(id: 1) {
+        id
+      }
+    }`
+    let error
+    try {
+      doesQueryContain(document, types, 'Deviceg')
+    } catch (err) {
+      error = err
+    }
+    expect(error).to.exist
+  })
   it(`basic test`, function () {
     const document = gql`{
       Device(id: 1) {

@@ -24,14 +24,16 @@ export default function doesQueryContain(
   ids?: ?Set<any>,
   idField?: string = 'id'
 ): boolean {
-  const potentialAncestors = getPotentialAncestors(types[typename])
+  const targetType = types[typename]
+  if (!targetType) throw new Error(`type not found: ${typename}`)
+  const potentialAncestors = getPotentialAncestors(targetType)
 
   function doesNodeContain(
     node: Node,
     data: any,
     type: Type,
   ): boolean {
-    if (type.name === typename) {
+    if (type === targetType) {
       if (!ids) return true
       return data && ids.has(data[idField])
     }

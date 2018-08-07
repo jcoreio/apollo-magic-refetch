@@ -21,7 +21,7 @@ function every<T>(array: $ReadOnlyArray<T>, predicate: (elem: T) => boolean): bo
 }
 
 export default async function refetch(
-  client: ApolloClient,
+  client: ApolloClient<any>,
   typenameOrTerms: string | $ReadOnlyArray<Term>,
   ids?: ?any,
   idField?: string

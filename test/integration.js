@@ -136,7 +136,7 @@ describe(`integration test`, function () {
     const observableQuery = client.watchQuery({query})
     observableQuery.subscribe({})
     await observableQuery.refetch()
-    const {data: {orgs}} = await observableQuery.currentResult()
+    const {data: {orgs}} = (observableQuery.currentResult(): any)
     expect(orgs.map(({id}) => id)).to.deep.equal([...Organizations.keys()])
 
     Users.delete(2)
@@ -146,7 +146,7 @@ describe(`integration test`, function () {
 
     await refetch(client, 'User', [2])
 
-    const {data: {orgs: finalOrgs}} = await observableQuery.currentResult()
+    const {data: {orgs: finalOrgs}} = (observableQuery.currentResult(): any)
 
     expect(finalOrgs.map(({Users}) => Users.map(({id}) => id))).to.deep.equal([
       [1],
@@ -180,7 +180,7 @@ describe(`integration test`, function () {
     observableUsersQuery.subscribe({})
     await observableUsersQuery.refetch()
 
-    const {data: {orgs}} = await observableQuery.currentResult()
+    const {data: {orgs}} = (observableQuery.currentResult(): any)
     expect(orgs.map(({id}) => id)).to.deep.equal([...Organizations.keys()]);
 
     (Users.get(2): any).organizationIds = [1];
@@ -191,7 +191,7 @@ describe(`integration test`, function () {
       ['Organization', 2],
     ])
 
-    const {data: {orgs: finalOrgs}} = await observableQuery.currentResult()
+    const {data: {orgs: finalOrgs}} = (observableQuery.currentResult(): any)
 
     expect(finalOrgs.map(({Users}) => Users.map(({id}) => id))).to.deep.equal([
       [1, 2],
@@ -225,7 +225,7 @@ describe(`integration test`, function () {
     observableUsersQuery.subscribe({})
     await observableUsersQuery.refetch()
 
-    const {data: {orgs}} = await observableQuery.currentResult()
+    const {data: {orgs}} = (observableQuery.currentResult(): any)
     expect(orgs.map(({id}) => id)).to.deep.equal([...Organizations.keys()]);
 
     (Users.get(4): any).organizationIds.push(2);
@@ -236,7 +236,7 @@ describe(`integration test`, function () {
       ['Organization', new Set([2])],
     ])
 
-    const {data: {orgs: finalOrgs}} = await observableQuery.currentResult()
+    const {data: {orgs: finalOrgs}} = (observableQuery.currentResult(): any)
 
     expect(finalOrgs.map(({Users}) => Users.map(({id}) => id))).to.deep.equal([
       [1, 2],

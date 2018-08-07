@@ -89,12 +89,12 @@ export function linkTypes(rawTypes: Array<RawType>): Types {
   return types
 }
 
-async function getSchemaTypes(client: ApolloClient): Promise<Types> {
+async function getSchemaTypes(client: ApolloClient<any>): Promise<Types> {
   const {data: {__schema: {types}}} = await client.query({query: typesQuery})
   return linkTypes(types)
 }
 
-export default function getSchemaTypesOnce(client: ApolloClient): Promise<Types> {
+export default function getSchemaTypesOnce(client: ApolloClient<any>): Promise<Types> {
   if (!promise) promise = getSchemaTypes(client)
   return promise
 }

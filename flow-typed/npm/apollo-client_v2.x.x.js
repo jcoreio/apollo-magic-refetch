@@ -1,9 +1,20 @@
 // flow-typed signature: ae6dd2fff7718a6434052f6830bf129b
 // flow-typed version: 2cbae06e0e/apollo-client_v2.x.x/flow_>=v0.57.x
 
-import type {DocumentNode, ExecutionResult, GraphQLError} from 'graphql';
-
 declare module "apollo-client" {
+  /**
+   * Types From graphql
+   * graphql types are maintained in the graphql-js repo
+   */
+  declare type DocumentNode = any;
+  declare type ExecutionResult<T> = {
+    data?: T,
+    extensions?: { [string]: any },
+    errors?: any[]
+  };
+  declare type GraphQLError = any;
+  /** End From graphql */
+
   declare type OperationVariables = { [key: string]: any };
 
   declare export function print(ast: any): string;
@@ -62,7 +73,6 @@ declare module "apollo-client" {
     mutationStore: MutationStore;
     queryStore: QueryStore;
     dataStore: DataStore<TStore>;
-    queries: Map<string, {document: DocumentNode, observableQuery: ObservableQuery<any>}>;
 
     constructor({
       link: ApolloLink,

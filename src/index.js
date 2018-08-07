@@ -1,6 +1,6 @@
 // @flow
 
-import type {ApolloClient} from 'apollo-client'
+import {ApolloClient} from 'apollo-client'
 import getSchemaTypes from './getSchemaTypes'
 import type {Types} from './getSchemaTypes'
 import doesQueryContain from './doesQueryContain'
@@ -21,11 +21,15 @@ function every<T>(array: $ReadOnlyArray<T>, predicate: (elem: T) => boolean): bo
 }
 
 export default async function refetch(
-  client: ApolloClient<any>,
+  client: mixed,
   typenameOrTerms: string | $ReadOnlyArray<Term>,
   ids?: ?any,
   idField?: string
 ): Promise<any> {
+  if (!(client instanceof ApolloClient)) throw new Error(
+    `client must be an ApolloClient, instead got: ${String(client)}`
+  )
+
   const types: Types = await getSchemaTypes(client)
 
   let terms

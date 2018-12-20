@@ -4,7 +4,9 @@ import { ApolloClient } from 'apollo-client'
 import getSchemaTypes from './getSchemaTypes'
 import type { Types } from './getSchemaTypes'
 import doesQueryContain from './doesQueryContain'
-export { default as typesQuery } from './typesQuery'
+import typesQuery, { type TypeMetadata } from './typesQuery'
+export { typesQuery }
+export type { TypeMetadata }
 
 function normalizePredicate(
   predicate: any,
@@ -29,18 +31,20 @@ function every<T>(
   return true
 }
 
+let typesPromise: ?Promise<Types> = null
+
 export default async function refetch(
   client: mixed,
   typenameOrTerms: string | $ReadOnlyArray<Term>,
   predicate?: ?any,
   idField?: string
 ): Promise<any> {
-  if (!(client instanceof ApolloClient))
+  if (!(client instanceof ApolloClient)) {
     throw new Error(
       `client must be an ApolloClient, instead got: ${String(client)}`
     )
-
-  const types: Types = await getSchemaTypes(client)
+  }
+  const types: Types = await refetch.fetchTypeMetadata(client)
 
   let terms
   if (typeof typenameOrTerms === 'string') {
@@ -79,4 +83,19 @@ export default async function refetch(
     }
   }
   await promises
+}
+
+refetch.fetchTypeMetadata = async function(
+  client: ApolloClient<any>
+): Promise<Types> {
+  if (!typesPromise) {
+    refetch.setTypeMetadata(client.query({ query: typesQuery }))
+  }
+  // istanbul ignore next
+  if (!typesPromise) throw new Error('this should never happen')
+  return await typesPromise
+}
+
+refetch.setTypeMetadata = (metadata: Promise<TypeMetadata> | TypeMetadata) => {
+  typesPromise = getSchemaTypes(async () => await metadata)
 }

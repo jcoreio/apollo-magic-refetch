@@ -68,15 +68,44 @@ If you are not using a bundler that supports the `modules.root` property in
 `apollo-magic-refetch` uses type metadata that it must fetch from GraphQL.
 If your schema is large enough it may be a prohibitive amount of metadata.
 `refetch` operations will be delayed until this metadata is fetched.
-To prefetch this metadata, do:
+To prefetch this metadata via a GraphQL introspection query, do:
 
 ```js
 import client from './wherever/you/create/your/apollo/client'
-import getSchemaTypes from 'apollo-magic-refetch/getSchemaTypes'
+import refetch from 'apollo-magic-refetch'
 
 // initiate the prefetch
-getSchemaTypes(client)
+refetch.fetchTypeMetadata(client)
 ```
+
+If your server forbids introspection queries, you will have to fetch it by
+other means. For instance, you could set up the following route on your server:
+
+````js
+import { execute } from 'graphql'
+import schema from './path/to/your/graphql/schema'
+import express from 'express'
+import { typesQuery } from 'apollo-magic-refetch'
+
+const app = express()
+
+const typeMetadataPromise = execute(schema, typesQuery)
+
+app.get('/graphql/refetchTypeMetadata', (req, res) => {
+  typeMetadataPromise.then(data => res.json(data))
+})```
+
+And then pass this data to `refetch.setTypeMetadata` **before you ever call
+`refetch()`**:
+
+```js
+import refetch from 'apollo-magic-refetch'
+
+// accepts a promise that resolves to the graphql execution result.
+refetch.setTypeMetadata(
+  fetch('/graphql/refetchTypeMetadata').then(res => res.json())
+)
+````
 
 ## Handling Deletions
 

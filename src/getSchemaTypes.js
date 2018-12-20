@@ -1,7 +1,6 @@
 // @flow
 
-import type { ApolloClient } from 'apollo-client'
-import typesQuery from './typesQuery'
+import type { TypeMetadata } from './typesQuery'
 
 export type RawField = {
   name: string,
@@ -30,8 +29,6 @@ export type Type = {
 }
 
 export type Types = { [name: string]: Type }
-
-let promise: ?Promise<Types>
 
 function convertRawField({ name, type }: RawField): Field {
   return ({ name, type: convertRawType(type) }: any)
@@ -88,18 +85,13 @@ export function linkTypes(rawTypes: Array<RawType>): Types {
   return types
 }
 
-async function getSchemaTypes(client: ApolloClient<any>): Promise<Types> {
+export default async function getSchemaTypes(
+  fetchTypeMetadata: () => Promise<TypeMetadata>
+): Promise<Types> {
   const {
     data: {
       __schema: { types },
     },
-  } = await client.query({ query: typesQuery })
-  return linkTypes(types)
-}
-
-export default function getSchemaTypesOnce(
-  client: ApolloClient<any>
-): Promise<Types> {
-  if (!promise) promise = getSchemaTypes(client)
-  return promise
+  } = await fetchTypeMetadata()
+  return linkTypes((types: any))
 }

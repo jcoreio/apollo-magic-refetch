@@ -155,4 +155,154 @@ describe(`doesQueryContain`, function() {
     expect(doesQueryContain(document, types, 'Device', data, new Set([5]))).to
       .be.false
   })
+  it(`recursive type test`, function() {
+    const document = gql`
+      {
+        MetadataItem(tag: "foo/bar") {
+          tag
+          Parent {
+            tag
+            Parent {
+              tag
+            }
+          }
+        }
+      }
+    `
+    const data = {
+      MetadataItem: {
+        tag: 'foo/bar',
+        __typename: 'MetadataItem',
+        Parent: {
+          tag: 'foo',
+          __typename: 'MetadataItem',
+          Parent: null,
+        },
+      },
+    }
+    expect(doesQueryContain(document, types, 'MetadataItem')).to.be.true
+    expect(
+      doesQueryContain(
+        document,
+        types,
+        'MetadataItem',
+        data,
+        new Set(['foo']),
+        'tag'
+      )
+    ).to.be.true
+    expect(
+      doesQueryContain(
+        document,
+        types,
+        'MetadataItem',
+        data,
+        new Set(['foo', 'foo/bar']),
+        'tag'
+      )
+    ).to.be.true
+    expect(
+      doesQueryContain(
+        document,
+        types,
+        'MetadataItem',
+        data,
+        new Set(['foo/bar']),
+        'tag'
+      )
+    ).to.be.true
+    expect(
+      doesQueryContain(
+        document,
+        types,
+        'MetadataItem',
+        data,
+        new Set(['foo/bar/baz']),
+        'tag'
+      )
+    ).to.be.false
+  })
+  it(`multi-step recursive type test`, function() {
+    const document = gql`
+      {
+        Organization(id: 2) {
+          id
+          Users {
+            edges {
+              node {
+                id
+                Organizations {
+                  edges {
+                    node {
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `
+    const data = {
+      Organization: {
+        id: 2,
+        Users: {
+          edges: [
+            {
+              node: {
+                id: 3,
+                Organizations: {
+                  edges: [
+                    {
+                      node: {
+                        id: 5,
+                      },
+                    },
+                    {
+                      node: {
+                        id: 6,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              node: {
+                id: 4,
+                Organizations: {
+                  edges: [
+                    {
+                      node: {
+                        id: 7,
+                      },
+                    },
+                    {
+                      node: {
+                        id: 8,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    }
+
+    expect(
+      doesQueryContain(document, types, 'Organization', data, new Set([7]))
+    ).to.be.true
+    expect(
+      doesQueryContain(document, types, 'Organization', data, new Set([5, 8]))
+    ).to.be.true
+    expect(
+      doesQueryContain(document, types, 'Organization', data, new Set([2]))
+    ).to.be.true
+    expect(
+      doesQueryContain(document, types, 'Organization', data, new Set([3]))
+    ).to.be.false
+  })
 })

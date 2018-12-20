@@ -27,5 +27,11 @@ describe(`getPotentialAncestors`, function() {
     expect(ancestors.get(types.Organization).fields.has('CustomDashboards')).to
       .be.false
     expect(ancestors.get(types.CustomDashboards)).not.to.exist
+    expect(ancestors.get(types.MetadataItem).fields.has('Parent')).to.be.true
+
+    expect(getPotentialAncestors(types.MetadataItem).has(types.MetadataItem))
+    expect(getPotentialAncestors(types.Organization).has(types.User))
+    expect(getPotentialAncestors(types.User).has(types.Organization))
+    expect(getPotentialAncestors(types.Organization).has(types.Organization))
   })
 })

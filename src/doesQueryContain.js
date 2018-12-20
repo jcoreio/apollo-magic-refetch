@@ -30,8 +30,7 @@ export default function doesQueryContain(
 
   function doesNodeContain(node: Node, data: any, type: Type): boolean {
     if (type === targetType) {
-      if (!ids) return true
-      return data && ids.has(data[idField])
+      if (!ids || (data && ids.has(data[idField]))) return true
     }
     if (!type.name) return false
     const ancestorEntry = potentialAncestors.get(type)

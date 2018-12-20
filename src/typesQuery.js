@@ -2,16 +2,14 @@
 
 import gql from 'graphql-tag'
 
-export default gql`{
-  __schema {
-    types {
-      name
-      fields {
+export default gql`
+  {
+    __schema {
+      types {
         name
-        type {
+        fields {
           name
-          kind
-          ofType {
+          type {
             name
             kind
             ofType {
@@ -19,6 +17,10 @@ export default gql`{
               kind
               ofType {
                 name
+                kind
+                ofType {
+                  name
+                }
               }
             }
           }
@@ -26,4 +28,4 @@ export default gql`{
       }
     }
   }
-}`
+`

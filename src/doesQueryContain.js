@@ -1,7 +1,7 @@
 // @flow
 
-import type {DocumentNode, SelectionSetNode, ASTKindToNode} from 'graphql'
-import type {Type, Types} from './getSchemaTypes'
+import type { DocumentNode, SelectionSetNode, ASTKindToNode } from 'graphql'
+import type { Type, Types } from './getSchemaTypes'
 import getPotentialAncestors from './getPotentialAncestors'
 
 type NodeKind = $Keys<ASTKindToNode>
@@ -28,11 +28,7 @@ export default function doesQueryContain(
   if (!targetType) throw new Error(`type not found: ${typename}`)
   const potentialAncestors = getPotentialAncestors(targetType)
 
-  function doesNodeContain(
-    node: Node,
-    data: any,
-    type: Type,
-  ): boolean {
+  function doesNodeContain(node: Node, data: any, type: Type): boolean {
     if (type === targetType) {
       if (!ids) return true
       return data && ids.has(data[idField])
@@ -40,14 +36,14 @@ export default function doesQueryContain(
     if (!type.name) return false
     const ancestorEntry = potentialAncestors.get(type)
     if (!ancestorEntry) return false
-    const {selectionSet} = node
+    const { selectionSet } = node
     if (selectionSet) {
       for (let selection of selectionSet.selections) {
         const alias: ?Name = (selection: any).alias
         const name: ?Name = (selection: any).name
         if (!name) continue
         if (!ancestorEntry.fields.has(name.value)) continue
-        const {fields} = type
+        const { fields } = type
         if (!fields) continue
         let field = fields[name.value]
         if (!field) continue

@@ -1,6 +1,6 @@
 // @flow
 
-import type {ApolloClient} from 'apollo-client'
+import type { ApolloClient } from 'apollo-client'
 import typesQuery from './typesQuery'
 
 export type RawField = {
@@ -25,20 +25,19 @@ export type Type = {
   name: ?string,
   kind: string,
   ofType?: ?Type,
-  fields?: ?{[name: string]: Field},
+  fields?: ?{ [name: string]: Field },
   parents?: Array<Field>,
 }
 
-export type Types = {[name: string]: Type}
+export type Types = { [name: string]: Type }
 
 let promise: ?Promise<Types>
 
-
-function convertRawField({name, type}: RawField): Field {
-  return ({name, type: convertRawType(type)}: any)
+function convertRawField({ name, type }: RawField): Field {
+  return ({ name, type: convertRawType(type) }: any)
 }
 
-function convertRawFields(fields: Array<RawField>): {[name: string]: Field} {
+function convertRawFields(fields: Array<RawField>): { [name: string]: Field } {
   const convertedFields = {}
   for (let field of fields) {
     convertedFields[field.name] = (convertRawField(field): any)
@@ -46,7 +45,7 @@ function convertRawFields(fields: Array<RawField>): {[name: string]: Field} {
   return convertedFields
 }
 
-function convertRawType({name, kind, ofType, fields}: RawType): Type {
+function convertRawType({ name, kind, ofType, fields }: RawType): Type {
   return {
     name,
     kind,
@@ -59,17 +58,17 @@ export function linkTypes(rawTypes: Array<RawType>): Types {
   const types: Types = {}
 
   for (let rawType of rawTypes) {
-    const {name} = rawType
+    const { name } = rawType
     if (name) {
       types[name] = convertRawType(rawType)
     }
   }
   function resolveType(type: Type, parent: ?Field): Type {
-    const {name, ofType} = type
+    const { name, ofType } = type
     if (name && types[name]) type = types[name]
     if (ofType) type.ofType = resolveType(ofType, parent)
     if (parent) {
-      let {parents} = type
+      let { parents } = type
       if (!parents) type.parents = parents = []
       parents.push(parent)
     }
@@ -77,7 +76,7 @@ export function linkTypes(rawTypes: Array<RawType>): Types {
   }
   for (let name in types) {
     const type = types[name]
-    const {fields} = type
+    const { fields } = type
     if (fields) {
       for (let name in fields) {
         const field = fields[name]
@@ -90,11 +89,17 @@ export function linkTypes(rawTypes: Array<RawType>): Types {
 }
 
 async function getSchemaTypes(client: ApolloClient<any>): Promise<Types> {
-  const {data: {__schema: {types}}} = await client.query({query: typesQuery})
+  const {
+    data: {
+      __schema: { types },
+    },
+  } = await client.query({ query: typesQuery })
   return linkTypes(types)
 }
 
-export default function getSchemaTypesOnce(client: ApolloClient<any>): Promise<Types> {
+export default function getSchemaTypesOnce(
+  client: ApolloClient<any>
+): Promise<Types> {
   if (!promise) promise = getSchemaTypes(client)
   return promise
 }

@@ -4,6 +4,7 @@
 [![Coverage Status](https://codecov.io/gh/jcoreio/apollo-magic-refetch/branch/master/graph/badge.svg)](https://codecov.io/gh/jcoreio/apollo-magic-refetch)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![npm version](https://badge.fury.io/js/apollo-magic-refetch)](https://badge.fury.io/js/apollo-magic-refetch)
 
 Handling Apollo cache updates after creating and deleting objects, or
 associating and dissociating objects, remains a
@@ -19,16 +20,16 @@ Until that happens, this is probably your best bet!
 
 # Table of Contents
 
-* [How it works](#how-it-works)
-* [Current limitations](#current-limitations)
-* [ES environment requirements](#es-environment-requirements)
-* [Type metadata usage](#type-metadata-usage)
-* [Handling Deletions](#handling-deletions)
-* [Handling Creation](#handling-creation)
-* [Handling associations being broken](#handling-associations-being-broken)
-* [Handling associations being created](#handling-associations-being-created)
-* [API](#api)
-  + [`refetch(client, typenameOrTerms, [ids], [idField])`](#refetchclient-typenameorterms-ids-idfield)
+- [How it works](#how-it-works)
+- [Current limitations](#current-limitations)
+- [ES environment requirements](#es-environment-requirements)
+- [Type metadata usage](#type-metadata-usage)
+- [Handling Deletions](#handling-deletions)
+- [Handling Creation](#handling-creation)
+- [Handling associations being broken](#handling-associations-being-broken)
+- [Handling associations being created](#handling-associations-being-created)
+- [API](#api)
+  - [`refetch(client, typenameOrTerms, [ids], [idField])`](#refetchclient-typenameorterms-ids-idfield)
 
 ## How it works
 
@@ -38,23 +39,23 @@ anywhere within their current data!
 
 Similarly, after you create an object, you tell it the `typename` of the created
 object and it refetches all active queries that contain an object of that type
-in their selections.  This is a bit less efficient than handling deletes, but
+in their selections. This is a bit less efficient than handling deletes, but
 way easier than anything else at the time of writing.
 
 Since only active queries can be refetched, data in the cache for inactive
-queries will remain out-of-date.  For that reason, I would recommend using the
+queries will remain out-of-date. For that reason, I would recommend using the
 `cache-and-network` policy on all queries you're not planning to `update` after
 all pertinent mutations.
 
 ## Current limitations
 
-Interfaces and union types are not supported yet.  This means if they are
+Interfaces and union types are not supported yet. This means if they are
 anywhere in your results, this library may fail to refetch when it should.
 
 Also, lists of lists are not supported, if for whatever reason you are using
 lists of lists in your schema (I haven't even checked if this is possible).
 
-Recursive queries are not currently working (https://github.com/jcoreio/apollo-magic-refetch/issues/2); currently it stops at objects of the target type, rather than looking at their descendants. 
+Recursive queries are not currently working (https://github.com/jcoreio/apollo-magic-refetch/issues/2); currently it stops at objects of the target type, rather than looking at their descendants.
 
 ## ES environment requirements
 
@@ -82,7 +83,7 @@ getSchemaTypes(client)
 ## Handling Deletions
 
 In this example, the `__typename` of the object being deleted is `Device` and it
-uses the standard `id` field.  If instead the field were called `tag`, for
+uses the standard `id` field. If instead the field were called `tag`, for
 instance, you would pass `'tag'` after `deviceId` in the call to `refetch`.
 
 You may pass an array or `Set` of ids in place of a single `deviceId`.
@@ -119,7 +120,7 @@ const DestroyDeviceButton = ({deviceId}) => (
 
 When you omit the id parameter, `refetch` refetches all active queries that
 contain the requested `__typename` in their selections, regardless of what ids
-are actually in their results.  This can be used after creating an object.
+are actually in their results. This can be used after creating an object.
 
 In this example, the `__typename` of the object being created is `Device`.
 
@@ -159,16 +160,15 @@ const CreateDeviceFormContainer = () => (
 ## Handling associations being broken
 
 In this example, a view shows a list of `Organization`s, each containing a
-sublist of `User`s.  When one or more users is removed from an organization,
+sublist of `User`s. When one or more users is removed from an organization,
 it makes the following call:
+
 ```js
-refetch(client, [
-  ['User', userIds],
-  ['Organization', organizationId],
-])
+refetch(client, [['User', userIds], ['Organization', organizationId]])
 ```
+
 Passing an array to `refetch` means to only refetch queries containing all of
-the conditions in the array.  So the query below would be refetched, but a query
+the conditions in the array. So the query below would be refetched, but a query
 containing only `Organizations` or a query containing only `User`s would not.
 
 ```js
@@ -250,15 +250,14 @@ const OrganizationsViewContainer = () => (
 
 Assuming the same `Organization`s/`User`s schema as above, the example performs
 the necessary refetches when a user is created and added to an organization:
+
 ```js
-refetch(client, [
-  ['User'],
-  ['Organization', organizationId],
-])
+refetch(client, [['User'], ['Organization', organizationId]])
 ```
+
 In this case no `ids` are given for `User`, so any query containing the an
 `Organization` with the given `organizationId` in its results and selecting any
-`User`s would be refetched.  (This doesn't perfectly exclude cases that fetch
+`User`s would be refetched. (This doesn't perfectly exclude cases that fetch
 Users and Organizations separately, instead of one nested inside the other, but
 it's better than nothing).
 
@@ -266,36 +265,35 @@ it's better than nothing).
 import * as React from 'react'
 import gql from 'graphql-tag'
 import refetch from 'apollo-magic-refetch'
-import {Mutation, ApolloConsumer} from 'react-apollo'
+import { Mutation, ApolloConsumer } from 'react-apollo'
 import CreateUserForm from './CreateUserForm'
 
 const mutation = gql`
-mutation createUser($organizationId: Int!, $values: CreateUser!) {
-  result: createUser(organizationId: $organizationId, values: $values) {
-    organizationId
-    id
-    username
+  mutation createUser($organizationId: Int!, $values: CreateUser!) {
+    result: createUser(organizationId: $organizationId, values: $values) {
+      organizationId
+      id
+      username
+    }
   }
-}
 `
 
-const CreateUserFormContainer = ({organizationId}) => (
+const CreateUserFormContainer = ({ organizationId }) => (
   <ApolloConsumer>
     {client => (
       <Mutation
         mutation={mutation}
         update={() =>
-          refetch(client, [
-            ['User'],
-            ['Organization', organizationId],
-          ])
+          refetch(client, [['User'], ['Organization', organizationId]])
         }
       >
         {createUser => (
           <CreateUserForm
-            onSubmit={values => createUser({
-              variables: {organizationId, values},
-            })}
+            onSubmit={values =>
+              createUser({
+                variables: { organizationId, values },
+              })
+            }
           />
         )}
       </Mutation>
@@ -317,16 +315,16 @@ The `ApolloClient` in which to scan active queries.
 ##### `typenameOrTerms: string | Array<Term>`
 
 The `__typename` of the GraphQL type that was created or deleted, or an array of
-`[typename, ids, idField]` tuples (`ids` and `idField` are optional).  If an
+`[typename, ids, idField]` tuples (`ids` and `idField` are optional). If an
 array is given, a query must match all of the conditions in the array to be
 refetched.
 
-##### `ids: any` (*optional*)
+##### `ids: any` (_optional_)
 
-A single id, an array of ids, or a `Set` of ids that were deleted.  If given,
+A single id, an array of ids, or a `Set` of ids that were deleted. If given,
 only active queries whose current result contains an object with the given
 `typename` and `id` will be refetched.
 
-##### `idField: string` (*optional, default*: `'id'`)
+##### `idField: string` (_optional, default_: `'id'`)
 
 The name of the id field in the type that was deleted.

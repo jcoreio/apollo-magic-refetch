@@ -1,6 +1,6 @@
 // @flow
 
-import type {Type} from './getSchemaTypes'
+import type { Type } from './getSchemaTypes'
 
 type Ancestor = {
   fields: Set<string>,
@@ -19,10 +19,10 @@ export default function getPotentialAncestors(type: Type): Ancestors {
     if (added.has(type)) return
     added.add(type)
 
-    const {parents} = type
+    const { parents } = type
     if (parents) {
       for (let field of parents) {
-        const {name, parent} = field
+        const { name, parent } = field
         let ancestor = ancestors.get(parent)
         if (!ancestor) {
           ancestor = {

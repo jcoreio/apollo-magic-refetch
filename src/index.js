@@ -4,6 +4,7 @@ import { ApolloClient } from 'apollo-client'
 import getSchemaTypes from './getSchemaTypes'
 import type { Types } from './getSchemaTypes'
 import doesQueryContain from './doesQueryContain'
+export { default as typesQuery } from './typesQuery'
 
 function normalizePredicate(
   predicate: any,

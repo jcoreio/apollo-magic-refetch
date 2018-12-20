@@ -81,7 +81,7 @@ refetch.fetchTypeMetadata(client)
 If your server forbids introspection queries, you will have to fetch it by
 other means. For instance, you could set up the following route on your server:
 
-````js
+```js
 import { execute } from 'graphql'
 import schema from './path/to/your/graphql/schema'
 import express from 'express'
@@ -93,7 +93,8 @@ const typeMetadataPromise = execute(schema, typesQuery)
 
 app.get('/graphql/refetchTypeMetadata', (req, res) => {
   typeMetadataPromise.then(data => res.json(data))
-})```
+})
+```
 
 And then pass this data to `refetch.setTypeMetadata` **before you ever call
 `refetch()`**:
@@ -105,7 +106,7 @@ import refetch from 'apollo-magic-refetch'
 refetch.setTypeMetadata(
   fetch('/graphql/refetchTypeMetadata').then(res => res.json())
 )
-````
+```
 
 ## Handling Deletions
 
@@ -358,3 +359,7 @@ result matches the predicate or contains an object with the given `typename` and
 
 The name of the id field in the type that was deleted. This is only used if
 `predicate` is not an id, array, or `Set` of ids, rather than a `function`.
+
+```
+
+```

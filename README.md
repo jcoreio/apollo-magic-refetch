@@ -302,7 +302,7 @@ const CreateUserFormContainer = ({ organizationId }) => (
 
 ## API
 
-### `refetch(client, typenameOrTerms, [ids], [idField])`
+### `refetch(client, typenameOrTerms, [predicate], [idField])`
 
 #### Arguments
 
@@ -313,7 +313,7 @@ The `ApolloClient` in which to scan active queries.
 ##### `typenameOrTerms: string | Array<Term>`
 
 The `__typename` of the GraphQL type that was created or deleted, or an array of
-`[typename, ids, idField]` tuples (`ids` and `idField` are optional). If an
+`[typename, predicate, idField]` tuples (`predicate` and `idField` are optional). If an
 array is given, a query must match all of the conditions in the array to be
 refetched.
 

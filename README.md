@@ -55,8 +55,6 @@ anywhere in your results, this library may fail to refetch when it should.
 Also, lists of lists are not supported, if for whatever reason you are using
 lists of lists in your schema (I haven't even checked if this is possible).
 
-Recursive queries are not currently working (https://github.com/jcoreio/apollo-magic-refetch/issues/2); currently it stops at objects of the target type, rather than looking at their descendants.
-
 ## ES environment requirements
 
 If you are building for legacy browsers with a bundler like Webpack, make sure

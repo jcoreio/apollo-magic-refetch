@@ -5,10 +5,15 @@ import getSchemaTypes from './getSchemaTypes'
 import type { Types } from './getSchemaTypes'
 import doesQueryContain from './doesQueryContain'
 
-function normalizeIds(ids: any): Set<any> {
-  if (ids instanceof Set) return ids
-  if (Array.isArray(ids)) return new Set(ids)
-  return new Set([ids])
+function normalizePredicate(
+  predicate: any,
+  idField: string
+): (data: any) => boolean {
+  if (typeof predicate === 'function') return predicate
+  let ids = predicate
+  if (Array.isArray(ids)) ids = new Set(ids)
+  else if (!(ids instanceof Set)) ids = new Set([ids])
+  return data => ids.has(data[idField])
 }
 
 type Term = [string, any, ?string] | [string, any] | [string]
@@ -26,7 +31,7 @@ function every<T>(
 export default async function refetch(
   client: mixed,
   typenameOrTerms: string | $ReadOnlyArray<Term>,
-  ids?: ?any,
+  predicate?: ?any,
   idField?: string
 ): Promise<any> {
   if (!(client instanceof ApolloClient))
@@ -38,7 +43,7 @@ export default async function refetch(
 
   let terms
   if (typeof typenameOrTerms === 'string') {
-    terms = [[typenameOrTerms, ids, idField]]
+    terms = [[typenameOrTerms, predicate, idField]]
   } else if (Array.isArray(typenameOrTerms)) {
     terms = typenameOrTerms
   } else {
@@ -57,14 +62,15 @@ export default async function refetch(
     if (currentResult) data = currentResult.data
 
     if (
-      every(terms, ([typename, ids, idField]: any) =>
+      every(terms, ([typename, predicate, idField]: any) =>
         doesQueryContain(
           document,
           types,
           typename,
           data,
-          ids != null ? normalizeIds(ids) : null,
-          idField || 'id'
+          predicate != null
+            ? normalizePredicate(predicate, idField || 'id')
+            : null
         )
       )
     ) {

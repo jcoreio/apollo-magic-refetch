@@ -317,12 +317,15 @@ The `__typename` of the GraphQL type that was created or deleted, or an array of
 array is given, a query must match all of the conditions in the array to be
 refetched.
 
-##### `ids: any` (_optional_)
+##### `predicate: any` (_optional_)
 
-A single id, an array of ids, or a `Set` of ids that were deleted. If given,
-only active queries whose current result contains an object with the given
-`typename` and `id` will be refetched.
+A single id, an array of ids, or a `Set` of ids that were deleted, or a
+predicate that takes an instance of the GraphQL type and returns `true` if the
+query should be refetched. If given, only active queries whose current result
+matches the predicate or contains an object with the given `typename` and `id`
+will be refetched.
 
 ##### `idField: string` (_optional, default_: `'id'`)
 
-The name of the id field in the type that was deleted.
+The name of the id field in the type that was deleted. This is only used if
+`predicate` is not an id, array, or `Set` of ids, rather than a `function`.

@@ -167,7 +167,7 @@ describe(`integration test`, function() {
       org.userIds = org.userIds.filter(id => id !== 2)
     }
 
-    await refetch(client, 'User', [2])
+    await refetch(client, 'User', u => u.id === 2)
 
     const {
       data: { orgs: finalOrgs },
@@ -215,7 +215,7 @@ describe(`integration test`, function() {
     ;(Users.get(2): any).organizationIds = [1]
     ;(Organizations.get(2): any).userIds = [3]
 
-    await refetch(client, [['User', 2], ['Organization', 2]])
+    await refetch(client, [['User', 2], ['Organization', o => o.id === 2]])
 
     const {
       data: { orgs: finalOrgs },

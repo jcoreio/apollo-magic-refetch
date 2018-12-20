@@ -21,8 +21,7 @@ export default function doesQueryContain(
   types: Types,
   typename: string,
   data?: any,
-  ids?: ?Set<any>,
-  idField?: string = 'id'
+  predicate?: ?(data: any) => boolean
 ): boolean {
   const targetType = types[typename]
   if (!targetType) throw new Error(`type not found: ${typename}`)
@@ -30,7 +29,7 @@ export default function doesQueryContain(
 
   function doesNodeContain(node: Node, data: any, type: Type): boolean {
     if (type === targetType) {
-      if (!ids || (data && ids.has(data[idField]))) return true
+      if (!predicate || predicate(data)) return true
     }
     if (!type.name) return false
     const ancestorEntry = potentialAncestors.get(type)
@@ -54,9 +53,9 @@ export default function doesQueryContain(
           innerType = innerType.ofType
         }
         let innerData = data ? data[alias ? alias.value : name.value] : null
-        if (ids && innerData == null) continue
+        if (predicate && innerData == null) continue
 
-        if (ids && list) {
+        if (predicate && list) {
           if (!Array.isArray(innerData)) continue
           for (let element of innerData) {
             if (doesNodeContain((selection: any), element, innerType)) {

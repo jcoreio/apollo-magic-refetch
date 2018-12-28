@@ -110,11 +110,13 @@ refetch.setTypeMetadata(
 
 ## Handling Deletions
 
-In this example, the `__typename` of the object being deleted is `Device` and it
-uses the standard `id` field. If instead the field were called `tag`, for
-instance, you would pass `'tag'` after `deviceId` in the call to `refetch`.
+Typically you call `refetch` within the `update` callback of your `Mutation`
+that deletes objects.  You just have to call `refetch` with the `__typename`
+that was deleted (in this case, `Device`) and the `id` of the deleted object.
+This refetches any active queries that contain the deleted object in cached data.
 
-You may pass an array or `Set` of ids in place of a single `deviceId`.
+For mutations that delete multiple things at once, you may pass an array or `Set`
+of ids to `refetch`, or make multiple calls to `refetch` in your `update` method.
 
 ```js
 import * as React from 'react'
@@ -146,9 +148,16 @@ const DestroyDeviceButton = ({deviceId}) => (
 
 ## Handling Creation
 
-When you omit the id parameter, `refetch` refetches all active queries that
-contain the requested `__typename` in their selections, regardless of what ids
-are actually in their results. This can be used after creating an object.
+Typically you call `refetch` within the `update` callback of your `Mutation`
+that creates objects.  You just have to call `refetch` with the `__typename`
+that was created.
+
+Unlike deletions, you don't pass the `id` of the created
+object.  Without a specific `id` to search for, it simply refetches all active
+queries that contain any object of the requested `__typename` in their cached
+data, in case the created object belongs in the new results.  This is less
+efficient than refetching queries containing a specific `id`, but far easier
+than manually inserting the created object into each relevant query.
 
 In this example, the `__typename` of the object being created is `Device`.
 

@@ -343,6 +343,13 @@ const CreateUserFormContainer = ({ organizationId }) => (
 
 ### `refetch(client, typenameOrTerms, [predicate, [idField]])`
 
+```js
+import refetch from 'apollo-magic-refetch'
+```
+
+Scans active queries in the given `ApolloClient` and refetches any that contain
+data matching the given type(s)/id(s).
+
 #### Arguments
 
 ##### `client: ApolloClient`
@@ -368,3 +375,38 @@ result matches the predicate or contains an object with the given `typename` and
 
 The name of the id field in the type that was deleted. This is only used if
 `predicate` is not an id, array, or `Set` of ids, rather than a `function`.
+
+### `refetch.fetchTypeMetadata(client)`
+
+Prefetches type metadata by running an introspection query on the given on
+`ApolloClient`.  The server must support client introspection queries;
+otherwise use `refetch.setTypeMetadata`.
+
+#### Arguments
+
+##### `client: ApolloClient`
+
+The client to fetch type metadata from.
+
+### `refetch.setTypeMetadata(typeMetadataPromise)`
+
+Sets the type metadata to use for determing which queries to refetch.
+Use this method if your server forbids client introspection queries.
+
+#### Arguments
+
+##### `typeMetadataPromise: TypeMetadata | Promise<TypeMetadata>`
+
+The result of executing the `typesQuery` GraphQL query or a `Promise` that
+will resolve to the result.
+
+### `typesQuery`
+
+```js
+import { typesQuery } from 'apollo-magic-refetch'
+```
+
+The parsed GraphQL introspection query that gets all of the type metadata
+needed to determine which queries to refetch.  Use this if your server forbids
+client introspection queries; execute this query on the server side and send
+the result to the client code that calls `refetch.setTypeMetadata`.

@@ -30,17 +30,8 @@ Until that happens, this is probably your best bet!
 * [Handling associations being created](#handling-associations-being-created)
 * [API](#api)
   + [`refetch(client, typenameOrTerms, [predicate, [idField]])`](#refetchclient-typenameorterms-predicate-idfield)
-    - [Arguments](#arguments)
-      * [`client: ApolloClient`](#client-apolloclient)
-      * [`typenameOrTerms: string | Array`](#typenameorterms-string--array)
-      * [`predicate: any` (_optional_)](#predicate-any-_optional_)
-      * [`idField: string` (_optional, default_: `'id'`)](#idfield-string-_optional-default_-id)
   + [`refetch.fetchTypeMetadata(client)`](#refetchfetchtypemetadataclient)
-    - [Arguments](#arguments-1)
-      * [`client: ApolloClient`](#client-apolloclient-1)
   + [`refetch.setTypeMetadata(typeMetadataPromise)`](#refetchsettypemetadatatypemetadatapromise)
-    - [Arguments](#arguments-2)
-      * [`typeMetadataPromise: TypeMetadata | Promise`](#typemetadatapromise-typemetadata--promise)
   + [`typesQuery`](#typesquery)
 
 ## How it works

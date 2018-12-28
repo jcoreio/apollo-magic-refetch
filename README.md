@@ -20,16 +20,28 @@ Until that happens, this is probably your best bet!
 
 # Table of Contents
 
-- [How it works](#how-it-works)
-- [Current limitations](#current-limitations)
-- [ES environment requirements](#es-environment-requirements)
-- [Type metadata usage](#type-metadata-usage)
-- [Handling Deletions](#handling-deletions)
-- [Handling Creation](#handling-creation)
-- [Handling associations being broken](#handling-associations-being-broken)
-- [Handling associations being created](#handling-associations-being-created)
-- [API](#api)
-  - [`refetch(client, typenameOrTerms, [ids], [idField])`](#refetchclient-typenameorterms-ids-idfield)
+* [How it works](#how-it-works)
+* [Current limitations](#current-limitations)
+* [ES environment requirements](#es-environment-requirements)
+* [Type metadata usage](#type-metadata-usage)
+* [Handling Deletions](#handling-deletions)
+* [Handling Creation](#handling-creation)
+* [Handling associations being broken](#handling-associations-being-broken)
+* [Handling associations being created](#handling-associations-being-created)
+* [API](#api)
+  + [`refetch(client, typenameOrTerms, [predicate, [idField]])`](#refetchclient-typenameorterms-predicate-idfield)
+    - [Arguments](#arguments)
+      * [`client: ApolloClient`](#client-apolloclient)
+      * [`typenameOrTerms: string | Array`](#typenameorterms-string--array)
+      * [`predicate: any` (_optional_)](#predicate-any-_optional_)
+      * [`idField: string` (_optional, default_: `'id'`)](#idfield-string-_optional-default_-id)
+  + [`refetch.fetchTypeMetadata(client)`](#refetchfetchtypemetadataclient)
+    - [Arguments](#arguments-1)
+      * [`client: ApolloClient`](#client-apolloclient-1)
+  + [`refetch.setTypeMetadata(typeMetadataPromise)`](#refetchsettypemetadatatypemetadatapromise)
+    - [Arguments](#arguments-2)
+      * [`typeMetadataPromise: TypeMetadata | Promise`](#typemetadatapromise-typemetadata--promise)
+  + [`typesQuery`](#typesquery)
 
 ## How it works
 
@@ -380,7 +392,7 @@ The name of the id field in the type that was deleted. This is only used if
 
 Prefetches type metadata by running an introspection query on the given on
 `ApolloClient`.  The server must support client introspection queries;
-otherwise use `refetch.setTypeMetadata`.
+otherwise use [`refetch.setTypeMetadata`](#refetchsettypemetadatatypemetadatapromise).
 
 #### Arguments
 
@@ -397,8 +409,8 @@ Use this method if your server forbids client introspection queries.
 
 ##### `typeMetadataPromise: TypeMetadata | Promise<TypeMetadata>`
 
-The result of executing the `typesQuery` GraphQL query or a `Promise` that
-will resolve to the result.
+The result of executing the [`typesQuery`](#typesquery) GraphQL query
+or a `Promise` that will resolve to the result.
 
 ### `typesQuery`
 
@@ -409,4 +421,5 @@ import { typesQuery } from 'apollo-magic-refetch'
 The parsed GraphQL introspection query that gets all of the type metadata
 needed to determine which queries to refetch.  Use this if your server forbids
 client introspection queries; execute this query on the server side and send
-the result to the client code that calls `refetch.setTypeMetadata`.
+the result to the client code that calls
+[`refetch.setTypeMetadata`](#refetchsettypemetadatatypemetadatapromise).

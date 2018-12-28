@@ -49,11 +49,9 @@ all pertinent mutations.
 
 ## Current limitations
 
-Interfaces and union types are not supported yet. This means if they are
+* Interfaces and union types are not supported yet. This means if they are
 anywhere in your results, this library may fail to refetch when it should.
-
-Also, lists of lists are not supported, if for whatever reason you are using
-lists of lists in your schema (I haven't even checked if this is possible).
+* Lists of lists are not supported yet.
 
 ## ES environment requirements
 
@@ -65,7 +63,8 @@ If you are not using a bundler that supports the `module` property in
 
 ## Type metadata usage
 
-`apollo-magic-refetch` uses type metadata that it must fetch from GraphQL.
+`apollo-magic-refetch` uses type metadata from GraphQL determine which queries
+need to be refetched; the client must get this metadata from the server.
 If your schema is large enough it may be a prohibitive amount of metadata.
 `refetch` operations will be delayed until this metadata is fetched.
 To prefetch this metadata via a GraphQL introspection query, do:
@@ -78,8 +77,9 @@ import refetch from 'apollo-magic-refetch'
 refetch.fetchTypeMetadata(client)
 ```
 
-If your server forbids introspection queries, you will have to fetch it by
-other means. For instance, you could set up the following route on your server:
+If your server forbids client introspection queries, you will have to fetch the
+metadata by other means. For instance, you could execute the required introspection
+query on the server, and serve the result on a custom REST route:
 
 ```js
 import { execute } from 'graphql'
@@ -341,7 +341,7 @@ const CreateUserFormContainer = ({ organizationId }) => (
 
 ## API
 
-### `refetch(client, typenameOrTerms, [predicate], [idField])`
+### `refetch(client, typenameOrTerms, [predicate, [idField]])`
 
 #### Arguments
 
@@ -368,7 +368,3 @@ result matches the predicate or contains an object with the given `typename` and
 
 The name of the id field in the type that was deleted. This is only used if
 `predicate` is not an id, array, or `Set` of ids, rather than a `function`.
-
-```
-
-```

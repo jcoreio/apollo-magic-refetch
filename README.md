@@ -60,7 +60,7 @@ lists of lists in your schema (I haven't even checked if this is possible).
 If you are building for legacy browsers with a bundler like Webpack, make sure
 to add a rule to transpile this package to ES5.
 
-If you are not using a bundler that supports the `modules.root` property in
+If you are not using a bundler that supports the `module` property in
 `package.json`, make sure to install `babel-runtime`.
 
 ## Type metadata usage

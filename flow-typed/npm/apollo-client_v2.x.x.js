@@ -1,23 +1,23 @@
 // flow-typed signature: ae6dd2fff7718a6434052f6830bf129b
 // flow-typed version: 2cbae06e0e/apollo-client_v2.x.x/flow_>=v0.57.x
 
-declare module "apollo-client" {
+declare module 'apollo-client' {
   /**
    * Types From graphql
    * graphql types are maintained in the graphql-js repo
    */
-  declare type DocumentNode = any;
+  declare type DocumentNode = any
   declare type ExecutionResult<T> = {
     data?: T,
     extensions?: { [string]: any },
-    errors?: any[]
-  };
-  declare type GraphQLError = any;
+    errors?: any[],
+  }
+  declare type GraphQLError = any
   /** End From graphql */
 
-  declare type OperationVariables = { [key: string]: any };
+  declare type OperationVariables = { [key: string]: any }
 
-  declare export function print(ast: any): string;
+  declare export function print(ast: any): string
 
   declare export class ObservableQuery<T> extends Observable<
     ApolloQueryResult<T>
@@ -39,7 +39,7 @@ declare module "apollo-client" {
     constructor(data: {
       scheduler: QueryScheduler<any>,
       options: WatchQueryOptions,
-      shouldSubscribe?: boolean
+      shouldSubscribe?: boolean,
     }): this;
 
     result(): Promise<ApolloQueryResult<T>>;
@@ -71,6 +71,10 @@ declare module "apollo-client" {
     scheduler: QueryScheduler<TStore>;
     link: ApolloLink;
     mutationStore: MutationStore;
+    queries: Map<
+      String,
+      { document: DocumentNode, observableQuery: ObservableQuery<any> }
+    >;
     queryStore: QueryStore;
     dataStore: DataStore<TStore>;
 
@@ -79,7 +83,7 @@ declare module "apollo-client" {
       queryDeduplication?: boolean,
       store: DataStore<TStore>,
       onBroadcast?: () => void,
-      ssrMode?: boolean
+      ssrMode?: boolean,
     }): this;
 
     mutate<T>(options: MutationOptions<>): Promise<FetchResult<T>>;
@@ -134,7 +138,7 @@ declare module "apollo-client" {
       isPoll: boolean,
       isRefetch: boolean,
       metadata: any,
-      fetchMoreForQueryId: string | void
+      fetchMoreForQueryId: string | void,
     }): void;
     markQueryResult(
       queryId: string,
@@ -158,7 +162,7 @@ declare module "apollo-client" {
     queryManager: QueryManager<TCacheShape>;
     constructor({
       queryManager: QueryManager<TCacheShape>,
-      ssrMode?: boolean
+      ssrMode?: boolean,
     }): this;
     checkInFlight(queryId: string): ?boolean;
     fetchQuery<T>(
@@ -205,7 +209,7 @@ declare module "apollo-client" {
       variables: any,
       updateQueries: { [queryId: string]: QueryWithUpdater },
       update: ((proxy: DataProxy, mutationResult: Object) => void) | void,
-      optimisticResponse: Object | Function | void
+      optimisticResponse: Object | Function | void,
     }): void;
     markMutationResult(mutation: {
       mutationId: string,
@@ -213,11 +217,11 @@ declare module "apollo-client" {
       document: DocumentNode,
       variables: any,
       updateQueries: { [queryId: string]: QueryWithUpdater },
-      update: ((proxy: DataProxy, mutationResult: Object) => void) | void
+      update: ((proxy: DataProxy, mutationResult: Object) => void) | void,
     }): void;
     markMutationComplete({
       mutationId: string,
-      optimisticResponse?: any
+      optimisticResponse?: any,
     }): void;
     markUpdateQueryResult(
       document: DocumentNode,
@@ -229,8 +233,8 @@ declare module "apollo-client" {
 
   declare type QueryWithUpdater = {
     updater: MutationQueryReducer<Object>,
-    query: QueryStoreValue
-  };
+    query: QueryStoreValue,
+  }
 
   declare interface MutationStoreValue {
     mutationString: string;
@@ -254,7 +258,7 @@ declare module "apollo-client" {
       previousQueryResult: TData,
       options: {
         fetchMoreResult?: TData,
-        variables: TVariables
+        variables: TVariables,
       }
     ) => TData;
   }
@@ -269,8 +273,8 @@ declare module "apollo-client" {
     loading: boolean,
     networkStatus: NetworkStatus,
     error?: ApolloError,
-    partial?: boolean
-  };
+    partial?: boolean,
+  }
 
   declare interface ModifiableWatchQueryOptions {
     variables?: { [key: string]: any };
@@ -288,7 +292,7 @@ declare module "apollo-client" {
     context?: any;
   }
 
-  declare type RefetchQueryDescription = Array<string | PureQueryOptions>;
+  declare type RefetchQueryDescription = Array<string | PureQueryOptions>
 
   declare interface MutationBaseOptions<T = { [key: string]: any }> {
     optimisticResponse?: Object | Function;
@@ -302,7 +306,9 @@ declare module "apollo-client" {
     variables?: any;
   }
 
-  declare export type MutationOperation<T = Object> = (options: MutationBaseOptions<T>) => Promise<FetchResult<T>>
+  declare export type MutationOperation<T = Object> = (
+    options: MutationBaseOptions<T>
+  ) => Promise<FetchResult<T>>
 
   declare export interface MutationOptions<T = { [key: string]: any }>
     extends MutationBaseOptions<T> {
@@ -317,14 +323,14 @@ declare module "apollo-client" {
   }
 
   declare export type FetchPolicy =
-    | "cache-first"
-    | "cache-and-network"
-    | "network-only"
-    | "cache-only"
-    | "no-cache"
-    | "standby";
+    | 'cache-first'
+    | 'cache-and-network'
+    | 'network-only'
+    | 'cache-only'
+    | 'no-cache'
+    | 'standby'
 
-  declare export type ErrorPolicy = "none" | "ignore" | "all";
+  declare export type ErrorPolicy = 'none' | 'ignore' | 'all'
 
   declare export interface FetchMoreQueryOptions<TVariables> {
     variables: $Shape<TVariables>;
@@ -341,23 +347,23 @@ declare module "apollo-client" {
       previousResult: TData,
       result: {
         subscriptionData: { data?: TSubscriptionData },
-        variables: TSubscriptionVariables
+        variables: TSubscriptionVariables,
       }
     ) => TData,
-    onError?: (error: Error) => void
-  };
+    onError?: (error: Error) => void,
+  }
 
   declare export type MutationUpdaterFn<T = OperationVariables> = (
     proxy: DataProxy,
     mutationResult: FetchResult<T>
-  ) => void;
+  ) => void
 
-  declare export type NetworkStatus = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  declare export type NetworkStatus = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
   declare export type QueryListener = (
     queryStoreValue: QueryStoreValue,
     newData?: any
-  ) => void;
+  ) => void
 
   declare export type QueryStoreValue = {
     document: DocumentNode,
@@ -366,36 +372,36 @@ declare module "apollo-client" {
     networkStatus: NetworkStatus,
     networkError: Error | null,
     graphQLErrors: GraphQLError[],
-    metadata: any
-  };
+    metadata: any,
+  }
 
   declare export type PureQueryOptions = {
     query: DocumentNode,
-    variables?: { [key: string]: any }
-  };
+    variables?: { [key: string]: any },
+  }
 
   declare export type ApolloQueryResult<T> = {
     data: T,
     errors?: Array<GraphQLError>,
     loading: boolean,
     networkStatus: NetworkStatus,
-    stale: boolean
-  };
+    stale: boolean,
+  }
 
-  declare export type FetchType = 1 | 2 | 3;
+  declare export type FetchType = 1 | 2 | 3
 
   declare export type MutationQueryReducer<T> = (
     previousResult: { [key: string]: any },
     options: {
       mutationResult: FetchResult<T>,
       queryName: string | void,
-      queryVariables: { [key: string]: any }
+      queryVariables: { [key: string]: any },
     }
-  ) => { [key: string]: any };
+  ) => { [key: string]: any }
 
   declare export type MutationQueryReducersMap<T = { [key: string]: any }> = {
-    [queryName: string]: MutationQueryReducer<T>
-  };
+    [queryName: string]: MutationQueryReducer<T>,
+  }
 
   declare export class ApolloError extends Error {
     message: string;
@@ -425,8 +431,8 @@ declare module "apollo-client" {
     ssrForceFetchDelay?: number,
     connectToDevTools?: boolean,
     queryDeduplication?: boolean,
-    defaultOptions?: DefaultOptions
-  };
+    defaultOptions?: DefaultOptions,
+  }
 
   declare export class ApolloClient<TCacheShape> {
     link: ApolloLink;
@@ -464,7 +470,7 @@ declare module "apollo-client" {
     restore(serializedState: TCacheShape): ApolloCache<TCacheShape>;
   }
 
-  declare export default typeof ApolloClient;
+  declare export default typeof ApolloClient
 
   /* apollo-link types */
   declare export class ApolloLink {
@@ -517,14 +523,14 @@ declare module "apollo-client" {
   declare type FetchResult<
     C = { [key: string]: any },
     E = { [key: string]: any }
-  > = ExecutionResult<C> & { extension?: E, context?: C };
+  > = ExecutionResult<C> & { extension?: E, context?: C }
 
-  declare type NextLink = (operation: Operation) => Observable<FetchResult<>>;
+  declare type NextLink = (operation: Operation) => Observable<FetchResult<>>
 
   declare type RequestHandler = (
     operation: Operation,
     forward?: NextLink
-  ) => Observable<FetchResult<>> | null;
+  ) => Observable<FetchResult<>> | null
 
   declare class Observable<T> {
     subscribe(
@@ -586,7 +592,7 @@ declare module "apollo-client" {
 
   declare type ZenObservableSubscriber<T> = (
     observer: ZenObservableSubscriptionObserver<T>
-  ) => void | (() => void) | SubscriptionLINK;
+  ) => void | (() => void) | SubscriptionLINK
 
   declare interface ZenObservableObservableLike<T> {
     subscribe?: ZenObservableSubscriber<T>;
@@ -629,9 +635,9 @@ declare module "apollo-client" {
     writeData(options: CacheWriteDataOptions): void;
   }
 
-  declare type Transaction<T> = (c: ApolloCache<T>) => void;
+  declare type Transaction<T> = (c: ApolloCache<T>) => void
 
-  declare type CacheWatchCallback = (newData: any) => void;
+  declare type CacheWatchCallback = (newData: any) => void
 
   declare interface CacheEvictionResult {
     success: boolean;
@@ -660,11 +666,11 @@ declare module "apollo-client" {
     rootId?: string;
   }
 
-  declare type CacheDiffResult<T> = DataProxyDiffResult<T>;
-  declare type CacheWriteQueryOptions = DataProxyWriteQueryOptions;
-  declare type CacheWriteFragmentOptions = DataProxyWriteFragmentOptions;
-  declare type CacheWriteDataOptions = DataProxyWriteDataOptions;
-  declare type CacheReadFragmentOptions = DataProxyReadFragmentOptions;
+  declare type CacheDiffResult<T> = DataProxyDiffResult<T>
+  declare type CacheWriteQueryOptions = DataProxyWriteQueryOptions
+  declare type CacheWriteFragmentOptions = DataProxyWriteFragmentOptions
+  declare type CacheWriteDataOptions = DataProxyWriteDataOptions
+  declare type CacheReadFragmentOptions = DataProxyReadFragmentOptions
 
   declare interface DataProxyReadQueryOptions {
     query: DocumentNode;
@@ -699,8 +705,8 @@ declare module "apollo-client" {
 
   declare type DataProxyDiffResult<T> = {
     result?: T,
-    complete?: boolean
-  };
+    complete?: boolean,
+  }
 
   declare interface DataProxy {
     readQuery<QueryType>(

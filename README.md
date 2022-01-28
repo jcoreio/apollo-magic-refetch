@@ -1,6 +1,6 @@
 # apollo-magic-refetch
 
-[![Build Status](https://travis-ci.org/jcoreio/apollo-magic-refetch.svg?branch=master)](https://travis-ci.org/jcoreio/apollo-magic-refetch)
+[![CircleCI](https://circleci.com/gh/jcoreio/apollo-magic-refetch.svg?style=svg)](https://circleci.com/gh/jcoreio/apollo-magic-refetch)
 [![Coverage Status](https://codecov.io/gh/jcoreio/apollo-magic-refetch/branch/master/graph/badge.svg)](https://codecov.io/gh/jcoreio/apollo-magic-refetch)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
@@ -20,19 +20,19 @@ Until that happens, this is probably your best bet!
 
 # Table of Contents
 
-* [How it works](#how-it-works)
-* [Current limitations](#current-limitations)
-* [ES environment requirements](#es-environment-requirements)
-* [Type metadata usage](#type-metadata-usage)
-* [Handling Deletions](#handling-deletions)
-* [Handling Creation](#handling-creation)
-* [Handling associations being broken](#handling-associations-being-broken)
-* [Handling associations being created](#handling-associations-being-created)
-* [API](#api)
-  + [`refetch(client, typenameOrTerms, [predicate, [idField]])`](#refetchclient-typenameorterms-predicate-idfield)
-  + [`refetch.fetchTypeMetadata(client)`](#refetchfetchtypemetadataclient)
-  + [`refetch.setTypeMetadata(typeMetadataPromise)`](#refetchsettypemetadatatypemetadatapromise)
-  + [`typesQuery`](#typesquery)
+- [How it works](#how-it-works)
+- [Current limitations](#current-limitations)
+- [ES environment requirements](#es-environment-requirements)
+- [Type metadata usage](#type-metadata-usage)
+- [Handling Deletions](#handling-deletions)
+- [Handling Creation](#handling-creation)
+- [Handling associations being broken](#handling-associations-being-broken)
+- [Handling associations being created](#handling-associations-being-created)
+- [API](#api)
+  - [`refetch(client, typenameOrTerms, [predicate, [idField]])`](#refetchclient-typenameorterms-predicate-idfield)
+  - [`refetch.fetchTypeMetadata(client)`](#refetchfetchtypemetadataclient)
+  - [`refetch.setTypeMetadata(typeMetadataPromise)`](#refetchsettypemetadatatypemetadatapromise)
+  - [`typesQuery`](#typesquery)
 
 ## How it works
 
@@ -52,9 +52,9 @@ all pertinent mutations.
 
 ## Current limitations
 
-* Interfaces and union types are not supported yet. This means if they are
-anywhere in your results, this library may fail to refetch when it should.
-* Lists of lists are not supported yet.
+- Interfaces and union types are not supported yet. This means if they are
+  anywhere in your results, this library may fail to refetch when it should.
+- Lists of lists are not supported yet.
 
 ## ES environment requirements
 
@@ -95,7 +95,7 @@ const app = express()
 const typeMetadataPromise = execute(schema, typesQuery)
 
 app.get('/graphql/refetchTypeMetadata', (req, res) => {
-  typeMetadataPromise.then(data => res.json(data))
+  typeMetadataPromise.then((data) => res.json(data))
 })
 ```
 
@@ -107,14 +107,14 @@ import refetch from 'apollo-magic-refetch'
 
 // accepts a promise that resolves to the graphql execution result.
 refetch.setTypeMetadata(
-  fetch('/graphql/refetchTypeMetadata').then(res => res.json())
+  fetch('/graphql/refetchTypeMetadata').then((res) => res.json())
 )
 ```
 
 ## Handling Deletions
 
 Typically you call `refetch` within the `update` callback of your `Mutation`
-that deletes objects.  You just have to call `refetch` with the `__typename`
+that deletes objects. You just have to call `refetch` with the `__typename`
 that was deleted (in this case, `Device`) and the `id` of the deleted object.
 This refetches any active queries that contain the deleted object in cached data.
 
@@ -152,13 +152,13 @@ const DestroyDeviceButton = ({deviceId}) => (
 ## Handling Creation
 
 Typically you call `refetch` within the `update` callback of your `Mutation`
-that creates objects.  You just have to call `refetch` with the `__typename`
+that creates objects. You just have to call `refetch` with the `__typename`
 that was created.
 
 Unlike deletions, you don't pass the `id` of the created
-object.  Without a specific `id` to search for, it simply refetches all active
+object. Without a specific `id` to search for, it simply refetches all active
 queries that contain any object of the requested `__typename` in their cached
-data, in case the created object belongs in the new results.  This is less
+data, in case the created object belongs in the new results. This is less
 efficient than refetching queries containing a specific `id`, but far easier
 than manually inserting the created object into each relevant query.
 
@@ -204,7 +204,10 @@ sublist of `User`s. When one or more users is removed from an organization,
 it makes the following call:
 
 ```js
-refetch(client, [['User', userIds], ['Organization', organizationId]])
+refetch(client, [
+  ['User', userIds],
+  ['Organization', organizationId],
+])
 ```
 
 Passing an array to `refetch` means to only refetch queries containing all of
@@ -320,16 +323,16 @@ const mutation = gql`
 
 const CreateUserFormContainer = ({ organizationId }) => (
   <ApolloConsumer>
-    {client => (
+    {(client) => (
       <Mutation
         mutation={mutation}
         update={() =>
           refetch(client, [['User'], ['Organization', organizationId]])
         }
       >
-        {createUser => (
+        {(createUser) => (
           <CreateUserForm
-            onSubmit={values =>
+            onSubmit={(values) =>
               createUser({
                 variables: { organizationId, values },
               })
@@ -382,7 +385,7 @@ The name of the id field in the type that was deleted. This is only used if
 ### `refetch.fetchTypeMetadata(client)`
 
 Prefetches type metadata by running an introspection query on the given on
-`ApolloClient`.  The server must support client introspection queries;
+`ApolloClient`. The server must support client introspection queries;
 otherwise use [`refetch.setTypeMetadata`](#refetchsettypemetadatatypemetadatapromise).
 
 #### Arguments
@@ -410,7 +413,7 @@ import { typesQuery } from 'apollo-magic-refetch'
 ```
 
 The parsed GraphQL introspection query that gets all of the type metadata
-needed to determine which queries to refetch.  Use this if your server forbids
+needed to determine which queries to refetch. Use this if your server forbids
 client introspection queries; execute this query on the server side and send
 the result to the client code that calls
 [`refetch.setTypeMetadata`](#refetchsettypemetadatatypemetadatapromise).

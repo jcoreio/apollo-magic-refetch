@@ -35,13 +35,16 @@ const typeDefs = `
 let Organizations
 let Users
 
-const OrganizationsResolver = (doc: any, { ids }: { ids: ?Array<number> }) => {
-  if (ids) return ids.map(id => Organizations.get(id)).filter(Boolean)
+const OrganizationsResolver = (
+  doc: any,
+  { ids }: { ids: ?Array<number> }
+): any[] => {
+  if (ids) return ids.map((id) => Organizations.get(id)).filter(Boolean)
   return [...Organizations.values()]
 }
 
-const UsersResolver = (doc: any, { ids }: { ids: ?Array<number> }) => {
-  if (ids) return ids.map(id => Users.get(id)).filter(Boolean)
+const UsersResolver = (doc: any, { ids }: { ids: ?Array<number> }): any[] => {
+  if (ids) return ids.map((id) => Users.get(id)).filter(Boolean)
   return [...Users.values()]
 }
 
@@ -59,7 +62,7 @@ const resolvers = {
   },
 }
 
-describe(`integration test`, function() {
+describe(`integration test`, function () {
   let client, cache
 
   beforeEach(() => {
@@ -130,7 +133,7 @@ describe(`integration test`, function() {
     })
   })
 
-  it(`throws when invalid typenameOrTerms is given`, async function(): Promise<void> {
+  it(`throws when invalid typenameOrTerms is given`, async function (): Promise<void> {
     let error
     try {
       await refetch(client, (2: any))
@@ -140,7 +143,7 @@ describe(`integration test`, function() {
     expect(error).to.exist
   })
 
-  it(`ignores cache-only query`, async function(): Promise<void> {
+  it(`ignores cache-only query`, async function (): Promise<void> {
     const query = gql`
       {
         orgs: Organizations {
@@ -172,10 +175,10 @@ describe(`integration test`, function() {
 
     Users.delete(2)
     for (let org of Organizations.values()) {
-      org.userIds = org.userIds.filter(id => id !== 2)
+      org.userIds = org.userIds.filter((id) => id !== 2)
     }
 
-    await refetch(client, 'User', u => u.id === 2)
+    await refetch(client, 'User', (u) => u.id === 2)
 
     const {
       data: { orgs: finalOrgs },
@@ -183,10 +186,13 @@ describe(`integration test`, function() {
 
     expect(
       finalOrgs.map(({ Users }) => Users.map(({ id }) => id))
-    ).to.deep.equal([[1, 2], [2, 3]])
+    ).to.deep.equal([
+      [1, 2],
+      [2, 3],
+    ])
   })
 
-  it(`handles deleted User`, async function(): Promise<void> {
+  it(`handles deleted User`, async function (): Promise<void> {
     const query = gql`
       {
         orgs: Organizations {
@@ -210,10 +216,10 @@ describe(`integration test`, function() {
 
     Users.delete(2)
     for (let org of Organizations.values()) {
-      org.userIds = org.userIds.filter(id => id !== 2)
+      org.userIds = org.userIds.filter((id) => id !== 2)
     }
 
-    await refetch(client, 'User', u => u.id === 2)
+    await refetch(client, 'User', (u) => u.id === 2)
 
     const {
       data: { orgs: finalOrgs },
@@ -223,7 +229,7 @@ describe(`integration test`, function() {
       finalOrgs.map(({ Users }) => Users.map(({ id }) => id))
     ).to.deep.equal([[1], [3]])
   })
-  it(`handles User removed from org`, async function(): Promise<void> {
+  it(`handles User removed from org`, async function (): Promise<void> {
     const query = gql`
       {
         orgs: Organizations {
@@ -261,7 +267,10 @@ describe(`integration test`, function() {
     ;(Users.get(2): any).organizationIds = [1]
     ;(Organizations.get(2): any).userIds = [3]
 
-    await refetch(client, [['User', 2], ['Organization', o => o.id === 2]])
+    await refetch(client, [
+      ['User', 2],
+      ['Organization', (o) => o.id === 2],
+    ])
 
     const {
       data: { orgs: finalOrgs },
@@ -271,7 +280,7 @@ describe(`integration test`, function() {
       finalOrgs.map(({ Users }) => Users.map(({ id }) => id))
     ).to.deep.equal([[1, 2], [3]])
   })
-  it(`handles User added to org`, async function(): Promise<void> {
+  it(`handles User added to org`, async function (): Promise<void> {
     const query = gql`
       {
         orgs: Organizations {
@@ -317,6 +326,9 @@ describe(`integration test`, function() {
 
     expect(
       finalOrgs.map(({ Users }) => Users.map(({ id }) => id))
-    ).to.deep.equal([[1, 2], [2, 3, 4]])
+    ).to.deep.equal([
+      [1, 2],
+      [2, 3, 4],
+    ])
   })
 })

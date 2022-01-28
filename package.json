@@ -3,44 +3,50 @@
   "version": "0.0.0-development",
   "description": "magically refetches relevant queries after creates and deletes",
   "main": "index.js",
-  "module": "es/index.js",
-  "modules.root": "es",
   "sideEffects": false,
   "scripts": {
-    "lint": "eslint src test --cache",
-    "lint:fix": "eslint --fix src test --cache",
-    "lint:watch": "esw --watch src test --cache",
-    "prettier": "prettier --write src/**/*.js test/**/*.js",
-    "prettier:check": "prettier --list-different src/**/*.js test/**/*.js",
+    "lint": "eslint $npm_package_config_eslint",
+    "lint:fix": "eslint --fix $npm_package_config_eslint",
+    "prettier": "prettier --write $npm_package_config_prettier",
+    "prettier:check": "prettier --list-different $npm_package_config_prettier",
     "flow": "flow",
     "flow:coverage": "for file in src/**.js test/**.js; do echo $file; flow coverage $file; done",
-    "flow:watch": "flow-watch -e js,js.flow,flowconfig --ignore es/ --ignore node_modules/ --watch .flowconfig --watch src/ --watch test/",
-    "clean": "rimraf es lib $(cd src; ls) *.js.flow",
-    "build": "npm run clean && babel src --out-dir es && flow-copy-source -v src/ es && cross-env BABEL_ENV=es5 babel src --out-dir . && flow-copy-source -v src/ .",
-    "test": "cross-env NODE_ENV=production BABEL_ENV=es5 mocha $npm_package_config_mocha && cross-env NODE_ENV=production BABEL_ENV=coverage nyc --reporter=lcov --reporter=text mocha $npm_package_config_mocha",
-    "test:watch": "cross-env NODE_ENV=production BABEL_ENV=test mocha --watch $npm_package_config_mocha",
-    "test:debug": "cross-env NODE_ENV=production BABEL_ENV=test mocha --inspect-brk $npm_package_config_mocha",
+    "clean": "rimraf es lib $(cd src; ls) *.js.flow *.d.ts",
+    "build": "npm run clean && babel src --out-dir es && flow-copy-source -v src/ es && copy src/**/*.d.ts es && cross-env BABEL_ENV=es5 babel src --out-dir . && flow-copy-source -v src/ . && copy src/**/*.d.ts .",
+    "test": "cross-env NODE_ENV=test BABEL_ENV=es5 mocha $npm_package_config_mocha && cross-env NODE_ENV=test BABEL_ENV=coverage nyc --reporter=lcov --reporter=text mocha $npm_package_config_mocha",
+    "test:watch": "cross-env NODE_ENV=test BABEL_ENV=test mocha --watch $npm_package_config_mocha",
+    "test:debug": "cross-env NODE_ENV=test BABEL_ENV=test mocha --inspect-brk $npm_package_config_mocha",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov; codecov",
     "prepublishOnly": "npm run clean && npm run prettier:check && npm run lint && flow && npm test && npm run build",
     "open:coverage": "open coverage/lcov-report/index.html",
-    "semantic-release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once"
+    "semantic-release": "semantic-release"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged && npm run lint && flow",
-      "commit-msg": "commitlint -e $GIT_PARAMS",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-push": "npm test"
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
+    "*.{js,json,css,md,ts}": [
+      "prettier --write"
     ]
   },
+  "commitlint": {
+    "extends": [
+      "@jedwards1211/commitlint-config"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "config": {
-    "mocha": "-r @babel/register ./test/**/*.js",
+    "mocha": "-r @babel/register test/configure.js 'test/**/*.js'",
+    "eslint": "src test --cache",
+    "prettier": "*.{json,md,js} {src,test}/**/*.{js,ts}",
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
@@ -74,50 +80,44 @@
   },
   "homepage": "https://github.com/jcoreio/apollo-magic-refetch#readme",
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0",
-    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.1.6",
-    "@babel/preset-flow": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "@commitlint/cli": "^6.0.2",
-    "@commitlint/config-conventional": "^6.0.2",
-    "@jedwards1211/commitlint-config": "^1.0.0",
-    "@jedwards1211/eslint-config": "^2.0.0",
-    "@jedwards1211/eslint-config-flow": "^1.0.2",
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/eslint-parser": "^7.15.7",
+    "@babel/plugin-proposal-export-default-from": "^7.14.5",
+    "@babel/plugin-proposal-export-namespace-from": "^7.14.5",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-flow": "^7.14.5",
+    "@babel/register": "^7.15.3",
+    "@commitlint/cli": "^13.2.0",
+    "@commitlint/config-conventional": "^13.2.0",
+    "@jedwards1211/commitlint-config": "^1.0.2",
+    "@jedwards1211/eslint-config": "^2.0.2",
+    "@jedwards1211/eslint-config-flow": "^3.0.1",
     "apollo-cache-inmemory": "^1.3.12",
     "apollo-client": "^2.4.8",
     "apollo-link-schema": "^1.1.4",
-    "babel-eslint": "^10.0.1",
-    "babel-plugin-istanbul": "^5.1.0",
-    "chai": "^4.2.0",
-    "codecov": "^3.1.0",
+    "babel-plugin-istanbul": "^6.0.0",
+    "chai": "^4.3.4",
+    "codecov": "^3.8.3",
     "copy": "^0.3.2",
-    "cross-env": "^5.2.0",
-    "eslint": "^5.9.0",
-    "eslint-config-prettier": "^3.3.0",
-    "eslint-plugin-flowtype": "^3.2.0",
-    "eslint-watch": "^4.0.2",
-    "flow-bin": "^0.84.0",
-    "flow-copy-source": "^2.0.2",
-    "flow-watch": "^1.1.4",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-flowtype": "^6.1.0",
+    "flow-bin": "^0.161.0",
+    "flow-copy-source": "https://github.com/jedwards1211/flow-copy-source#no-watch",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.3",
-    "husky": "^1.1.4",
-    "istanbul": "^0.4.5",
-    "lint-staged": "^8.0.4",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
-    "prettier": "^1.15.2",
-    "prettier-eslint": "^8.8.2",
-    "rimraf": "^2.6.0",
-    "semantic-release": "^15.8.0",
-    "travis-deploy-once": "^5.0.9"
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "mocha": "^9.1.2",
+    "nyc": "^15.1.0",
+    "prettier": "^2.4.1",
+    "prettier-eslint": "^13.0.0",
+    "rimraf": "^3.0.2",
+    "semantic-release": "^18.0.0",
+    "typescript": "^4.4.3"
   },
   "optionalDependencies": {
     "babel-runtime": "^6.23.0"
@@ -127,7 +127,7 @@
     "graphql": "*"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.5",
+    "@babel/runtime": "^7.15.4",
     "graphql-tag": "^2.9.2"
   }
 }

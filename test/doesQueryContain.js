@@ -7,8 +7,8 @@ import gql from 'graphql-tag'
 
 import doesQueryContain from '../src/doesQueryContain'
 
-describe(`doesQueryContain`, function() {
-  it(`throws if type is not found`, function() {
+describe(`doesQueryContain`, function () {
+  it(`throws if type is not found`, function () {
     const document = gql`
       {
         Device(id: 1) {
@@ -24,7 +24,7 @@ describe(`doesQueryContain`, function() {
     }
     expect(error).to.exist
   })
-  it(`basic test`, function() {
+  it(`basic test`, function () {
     const document = gql`
       {
         Device(id: 1) {
@@ -42,7 +42,7 @@ describe(`doesQueryContain`, function() {
     expect(doesQueryContain(document, types, 'Organization')).to.be.false
     expect(doesQueryContain(document, types, 'User')).to.be.false
 
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 1))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 1))
       .to.be.true
     expect(
       doesQueryContain(
@@ -50,13 +50,13 @@ describe(`doesQueryContain`, function() {
         types,
         'Device',
         data,
-        d => d.id === 1 || d.id === 2
+        (d) => d.id === 1 || d.id === 2
       )
     ).to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 2))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 2))
       .to.be.false
   })
-  it(`connection test`, function() {
+  it(`connection test`, function () {
     const document = gql`
       {
         Devices {
@@ -81,9 +81,9 @@ describe(`doesQueryContain`, function() {
       .false
     expect(doesQueryContain(document, types, 'User')).to.be.false
 
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 1))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 1))
       .to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 2))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 2))
       .to.be.true
     expect(
       doesQueryContain(
@@ -91,13 +91,13 @@ describe(`doesQueryContain`, function() {
         types,
         'Device',
         data,
-        d => d.id === 1 || d.id === 2
+        (d) => d.id === 1 || d.id === 2
       )
     ).to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 3))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 3))
       .to.be.false
   })
-  it(`more complex test`, function() {
+  it(`more complex test`, function () {
     const document = gql`
       {
         Organizations {
@@ -147,7 +147,7 @@ describe(`doesQueryContain`, function() {
     expect(doesQueryContain(document, types, 'User')).to.be.false
 
     expect(
-      doesQueryContain(document, types, 'Organization', data, d => d.id === 1)
+      doesQueryContain(document, types, 'Organization', data, (d) => d.id === 1)
     ).to.be.true
     expect(
       doesQueryContain(
@@ -155,16 +155,16 @@ describe(`doesQueryContain`, function() {
         types,
         'Organization',
         data,
-        d => d.id === 1 || d.id === 2
+        (d) => d.id === 1 || d.id === 2
       )
     ).to.be.true
     expect(
-      doesQueryContain(document, types, 'Organization', data, d => d.id === 3)
+      doesQueryContain(document, types, 'Organization', data, (d) => d.id === 3)
     ).to.be.false
 
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 1))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 1))
       .to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 2))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 2))
       .to.be.true
     expect(
       doesQueryContain(
@@ -172,17 +172,17 @@ describe(`doesQueryContain`, function() {
         types,
         'Device',
         data,
-        d => d.id === 1 || d.id === 2
+        (d) => d.id === 1 || d.id === 2
       )
     ).to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 3))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 3))
       .to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 4))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 4))
       .to.be.true
-    expect(doesQueryContain(document, types, 'Device', data, d => d.id === 5))
+    expect(doesQueryContain(document, types, 'Device', data, (d) => d.id === 5))
       .to.be.false
   })
-  it(`recursive type test`, function() {
+  it(`recursive type test`, function () {
     const document = gql`
       {
         MetadataItem(tag: "foo/bar") {
@@ -214,7 +214,7 @@ describe(`doesQueryContain`, function() {
         types,
         'MetadataItem',
         data,
-        i => i.tag === 'foo'
+        (i) => i.tag === 'foo'
       )
     ).to.be.true
     expect(
@@ -223,7 +223,7 @@ describe(`doesQueryContain`, function() {
         types,
         'MetadataItem',
         data,
-        i => i.tag === 'foo/bar'
+        (i) => i.tag === 'foo/bar'
       )
     ).to.be.true
     expect(
@@ -232,11 +232,11 @@ describe(`doesQueryContain`, function() {
         types,
         'MetadataItem',
         data,
-        i => i.tag === 'foo/bar/baz'
+        (i) => i.tag === 'foo/bar/baz'
       )
     ).to.be.false
   })
-  it(`multi-step recursive type test`, function() {
+  it(`multi-step recursive type test`, function () {
     const document = gql`
       {
         Organization(id: 2) {
@@ -307,19 +307,19 @@ describe(`doesQueryContain`, function() {
     }
 
     expect(
-      doesQueryContain(document, types, 'Organization', data, o => o.id === 7)
+      doesQueryContain(document, types, 'Organization', data, (o) => o.id === 7)
     ).to.be.true
     expect(
-      doesQueryContain(document, types, 'Organization', data, o => o.id === 5)
+      doesQueryContain(document, types, 'Organization', data, (o) => o.id === 5)
     ).to.be.true
     expect(
-      doesQueryContain(document, types, 'Organization', data, o => o.id === 8)
+      doesQueryContain(document, types, 'Organization', data, (o) => o.id === 8)
     ).to.be.true
     expect(
-      doesQueryContain(document, types, 'Organization', data, o => o.id === 2)
+      doesQueryContain(document, types, 'Organization', data, (o) => o.id === 2)
     ).to.be.true
     expect(
-      doesQueryContain(document, types, 'Organization', data, o => o.id === 3)
+      doesQueryContain(document, types, 'Organization', data, (o) => o.id === 3)
     ).to.be.false
   })
 })

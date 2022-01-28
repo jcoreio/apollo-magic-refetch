@@ -5,8 +5,8 @@ import types from './types'
 
 import getPotentialAncestors from '../src/getPotentialAncestors'
 
-describe(`getPotentialAncestors`, function() {
-  it(`works`, function() {
+describe(`getPotentialAncestors`, function () {
+  it(`works`, function () {
     const ancestors = getPotentialAncestors(types.Device)
     expect(ancestors.get(types.DeviceGroup)).to.exist
     expect(ancestors.get(types.DeviceGroup).fields.has('Devices')).to.exist

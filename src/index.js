@@ -16,7 +16,7 @@ function normalizePredicate(
   let ids = predicate
   if (Array.isArray(ids)) ids = new Set(ids)
   else if (!(ids instanceof Set)) ids = new Set([ids])
-  return data => ids.has(data[idField])
+  return (data) => ids.has(data[idField])
 }
 
 type Term = [string, any, ?string] | [string, any] | [string]
@@ -86,7 +86,7 @@ export default async function refetch(
   await promises
 }
 
-refetch.fetchTypeMetadata = async function(
+refetch.fetchTypeMetadata = async function (
   client: ApolloClient<any>
 ): Promise<Types> {
   if (!typesPromise) {

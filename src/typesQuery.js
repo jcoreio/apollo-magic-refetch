@@ -1,8 +1,9 @@
 // @flow
 
 import gql from 'graphql-tag'
+import { type DocumentNode } from 'graphql'
 
-export default gql`
+const typesQuery: DocumentNode = gql`
   {
     __schema {
       types {
@@ -29,6 +30,7 @@ export default gql`
     }
   }
 `
+export default typesQuery
 
 type __TypeKind =
   | 'SCALAR'

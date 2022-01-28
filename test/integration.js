@@ -140,6 +140,52 @@ describe(`integration test`, function() {
     expect(error).to.exist
   })
 
+  it(`ignores cache-only query`, async function(): Promise<void> {
+    const query = gql`
+      {
+        orgs: Organizations {
+          id
+          name
+          Users {
+            id
+            username
+          }
+        }
+      }
+    `
+
+    await client.query({ query })
+
+    const observableQuery = client.watchQuery({
+      query,
+      fetchPolicy: 'cache-only',
+    })
+    observableQuery.subscribe({})
+    const {
+      data: { orgs },
+    } = (observableQuery.currentResult(): any)
+    expect(orgs.map(({ id }) => id)).to.deep.equal([...Organizations.keys()])
+    expect(orgs.map(({ Users }) => Users.map(({ id }) => id))).to.deep.equal([
+      [1, 2],
+      [2, 3],
+    ])
+
+    Users.delete(2)
+    for (let org of Organizations.values()) {
+      org.userIds = org.userIds.filter(id => id !== 2)
+    }
+
+    await refetch(client, 'User', u => u.id === 2)
+
+    const {
+      data: { orgs: finalOrgs },
+    } = (observableQuery.currentResult(): any)
+
+    expect(
+      finalOrgs.map(({ Users }) => Users.map(({ id }) => id))
+    ).to.deep.equal([[1, 2], [2, 3]])
+  })
+
   it(`handles deleted User`, async function(): Promise<void> {
     const query = gql`
       {

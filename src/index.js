@@ -62,6 +62,7 @@ export default async function refetch(
   for (let query of queries.values()) {
     const { document, observableQuery } = query
     if (!observableQuery) continue
+    if (observableQuery.options.fetchPolicy === 'cache-only') continue
     let data
     const currentResult = observableQuery.currentResult()
     if (currentResult) data = currentResult.data

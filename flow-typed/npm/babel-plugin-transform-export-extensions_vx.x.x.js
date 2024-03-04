@@ -14,7 +14,7 @@
  */
 
 declare module 'babel-plugin-transform-export-extensions' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,10 +23,10 @@ declare module 'babel-plugin-transform-export-extensions' {
  * needed.
  */
 declare module 'babel-plugin-transform-export-extensions/lib/index' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module 'babel-plugin-transform-export-extensions/lib/index.js' {
-  declare module.exports: $Exports<'babel-plugin-transform-export-extensions/lib/index'>;
+  declare module.exports: $Exports<'babel-plugin-transform-export-extensions/lib/index'>
 }

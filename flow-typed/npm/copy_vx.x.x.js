@@ -14,7 +14,7 @@
  */
 
 declare module 'copy' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,58 +23,58 @@ declare module 'copy' {
  * needed.
  */
 declare module 'copy/bin/cli' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'copy/lib/base' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'copy/lib/dest' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'copy/lib/invalid' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'copy/lib/once' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'copy/lib/recurse' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'copy/lib/utils' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module 'copy/bin/cli.js' {
-  declare module.exports: $Exports<'copy/bin/cli'>;
+  declare module.exports: $Exports<'copy/bin/cli'>
 }
 declare module 'copy/index' {
-  declare module.exports: $Exports<'copy'>;
+  declare module.exports: $Exports<'copy'>
 }
 declare module 'copy/index.js' {
-  declare module.exports: $Exports<'copy'>;
+  declare module.exports: $Exports<'copy'>
 }
 declare module 'copy/lib/base.js' {
-  declare module.exports: $Exports<'copy/lib/base'>;
+  declare module.exports: $Exports<'copy/lib/base'>
 }
 declare module 'copy/lib/dest.js' {
-  declare module.exports: $Exports<'copy/lib/dest'>;
+  declare module.exports: $Exports<'copy/lib/dest'>
 }
 declare module 'copy/lib/invalid.js' {
-  declare module.exports: $Exports<'copy/lib/invalid'>;
+  declare module.exports: $Exports<'copy/lib/invalid'>
 }
 declare module 'copy/lib/once.js' {
-  declare module.exports: $Exports<'copy/lib/once'>;
+  declare module.exports: $Exports<'copy/lib/once'>
 }
 declare module 'copy/lib/recurse.js' {
-  declare module.exports: $Exports<'copy/lib/recurse'>;
+  declare module.exports: $Exports<'copy/lib/recurse'>
 }
 declare module 'copy/lib/utils.js' {
-  declare module.exports: $Exports<'copy/lib/utils'>;
+  declare module.exports: $Exports<'copy/lib/utils'>
 }

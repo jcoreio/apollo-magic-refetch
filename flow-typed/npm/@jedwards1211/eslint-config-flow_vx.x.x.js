@@ -14,7 +14,7 @@
  */
 
 declare module '@jedwards1211/eslint-config-flow' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,11 +23,10 @@ declare module '@jedwards1211/eslint-config-flow' {
  * needed.
  */
 
-
 // Filename aliases
 declare module '@jedwards1211/eslint-config-flow/index' {
-  declare module.exports: $Exports<'@jedwards1211/eslint-config-flow'>;
+  declare module.exports: $Exports<'@jedwards1211/eslint-config-flow'>
 }
 declare module '@jedwards1211/eslint-config-flow/index.js' {
-  declare module.exports: $Exports<'@jedwards1211/eslint-config-flow'>;
+  declare module.exports: $Exports<'@jedwards1211/eslint-config-flow'>
 }

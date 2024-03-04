@@ -14,7 +14,7 @@
  */
 
 declare module '@commitlint/config-conventional' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,11 +23,10 @@ declare module '@commitlint/config-conventional' {
  * needed.
  */
 
-
 // Filename aliases
 declare module '@commitlint/config-conventional/index' {
-  declare module.exports: $Exports<'@commitlint/config-conventional'>;
+  declare module.exports: $Exports<'@commitlint/config-conventional'>
 }
 declare module '@commitlint/config-conventional/index.js' {
-  declare module.exports: $Exports<'@commitlint/config-conventional'>;
+  declare module.exports: $Exports<'@commitlint/config-conventional'>
 }

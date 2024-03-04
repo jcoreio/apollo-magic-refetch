@@ -14,7 +14,7 @@
  */
 
 declare module 'apollo-cache-inmemory' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,87 +23,87 @@ declare module 'apollo-cache-inmemory' {
  * needed.
  */
 declare module 'apollo-cache-inmemory/lib/bundle.umd' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/fragmentMatcher' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/fragmentMatcherIntrospectionQuery' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/index' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/inMemoryCache' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/mapCache' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/objectCache' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/readFromStore' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/recordingCache' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/types' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/lib/writeToStore' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-cache-inmemory/rollup.config' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module 'apollo-cache-inmemory/lib/bundle.umd.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/bundle.umd'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/bundle.umd'>
 }
 declare module 'apollo-cache-inmemory/lib/fragmentMatcher.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/fragmentMatcher'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/fragmentMatcher'>
 }
 declare module 'apollo-cache-inmemory/lib/fragmentMatcherIntrospectionQuery.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/fragmentMatcherIntrospectionQuery'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/fragmentMatcherIntrospectionQuery'>
 }
 declare module 'apollo-cache-inmemory/lib/index.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/index'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/index'>
 }
 declare module 'apollo-cache-inmemory/lib/inMemoryCache.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/inMemoryCache'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/inMemoryCache'>
 }
 declare module 'apollo-cache-inmemory/lib/mapCache.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/mapCache'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/mapCache'>
 }
 declare module 'apollo-cache-inmemory/lib/objectCache.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/objectCache'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/objectCache'>
 }
 declare module 'apollo-cache-inmemory/lib/readFromStore.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/readFromStore'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/readFromStore'>
 }
 declare module 'apollo-cache-inmemory/lib/recordingCache.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/recordingCache'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/recordingCache'>
 }
 declare module 'apollo-cache-inmemory/lib/types.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/types'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/types'>
 }
 declare module 'apollo-cache-inmemory/lib/writeToStore.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/lib/writeToStore'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/lib/writeToStore'>
 }
 declare module 'apollo-cache-inmemory/rollup.config.js' {
-  declare module.exports: $Exports<'apollo-cache-inmemory/rollup.config'>;
+  declare module.exports: $Exports<'apollo-cache-inmemory/rollup.config'>
 }

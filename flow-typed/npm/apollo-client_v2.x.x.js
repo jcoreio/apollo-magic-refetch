@@ -19,9 +19,9 @@ declare module 'apollo-client' {
 
   declare export function print(ast: any): string
 
-  declare export class ObservableQuery<T> extends Observable<
-    ApolloQueryResult<T>
-  > {
+  declare export class ObservableQuery<T>
+    extends Observable<ApolloQueryResult<T>>
+  {
     options: WatchQueryOptions;
     queryId: string;
     variables: { [key: string]: any };

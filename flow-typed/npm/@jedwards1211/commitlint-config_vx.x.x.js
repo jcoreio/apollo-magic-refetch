@@ -14,7 +14,7 @@
  */
 
 declare module '@jedwards1211/commitlint-config' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,10 +23,10 @@ declare module '@jedwards1211/commitlint-config' {
  * needed.
  */
 declare module '@jedwards1211/commitlint-config/commitlint.config' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module '@jedwards1211/commitlint-config/commitlint.config.js' {
-  declare module.exports: $Exports<'@jedwards1211/commitlint-config/commitlint.config'>;
+  declare module.exports: $Exports<'@jedwards1211/commitlint-config/commitlint.config'>
 }

@@ -14,7 +14,7 @@
  */
 
 declare module 'flow-copy-source' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,31 +23,31 @@ declare module 'flow-copy-source' {
  * needed.
  */
 declare module 'flow-copy-source/bin/flow-copy-source' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'flow-copy-source/src/index' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'flow-copy-source/src/kefir-copy-file' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'flow-copy-source/src/kefir-glob' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module 'flow-copy-source/bin/flow-copy-source.js' {
-  declare module.exports: $Exports<'flow-copy-source/bin/flow-copy-source'>;
+  declare module.exports: $Exports<'flow-copy-source/bin/flow-copy-source'>
 }
 declare module 'flow-copy-source/src/index.js' {
-  declare module.exports: $Exports<'flow-copy-source/src/index'>;
+  declare module.exports: $Exports<'flow-copy-source/src/index'>
 }
 declare module 'flow-copy-source/src/kefir-copy-file.js' {
-  declare module.exports: $Exports<'flow-copy-source/src/kefir-copy-file'>;
+  declare module.exports: $Exports<'flow-copy-source/src/kefir-copy-file'>
 }
 declare module 'flow-copy-source/src/kefir-glob.js' {
-  declare module.exports: $Exports<'flow-copy-source/src/kefir-glob'>;
+  declare module.exports: $Exports<'flow-copy-source/src/kefir-glob'>
 }

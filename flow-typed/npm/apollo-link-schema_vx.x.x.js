@@ -14,7 +14,7 @@
  */
 
 declare module 'apollo-link-schema' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,31 +23,31 @@ declare module 'apollo-link-schema' {
  * needed.
  */
 declare module 'apollo-link-schema/lib/bundle.umd' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-link-schema/lib/index' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-link-schema/lib/schemaLink' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'apollo-link-schema/rollup.config' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module 'apollo-link-schema/lib/bundle.umd.js' {
-  declare module.exports: $Exports<'apollo-link-schema/lib/bundle.umd'>;
+  declare module.exports: $Exports<'apollo-link-schema/lib/bundle.umd'>
 }
 declare module 'apollo-link-schema/lib/index.js' {
-  declare module.exports: $Exports<'apollo-link-schema/lib/index'>;
+  declare module.exports: $Exports<'apollo-link-schema/lib/index'>
 }
 declare module 'apollo-link-schema/lib/schemaLink.js' {
-  declare module.exports: $Exports<'apollo-link-schema/lib/schemaLink'>;
+  declare module.exports: $Exports<'apollo-link-schema/lib/schemaLink'>
 }
 declare module 'apollo-link-schema/rollup.config.js' {
-  declare module.exports: $Exports<'apollo-link-schema/rollup.config'>;
+  declare module.exports: $Exports<'apollo-link-schema/rollup.config'>
 }

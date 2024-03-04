@@ -14,7 +14,7 @@
  */
 
 declare module 'flow-watch' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 /**
@@ -23,17 +23,17 @@ declare module 'flow-watch' {
  * needed.
  */
 declare module 'flow-watch/src/flow-watch' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 declare module 'flow-watch/src/runFlow' {
-  declare module.exports: any;
+  declare module.exports: any
 }
 
 // Filename aliases
 declare module 'flow-watch/src/flow-watch.js' {
-  declare module.exports: $Exports<'flow-watch/src/flow-watch'>;
+  declare module.exports: $Exports<'flow-watch/src/flow-watch'>
 }
 declare module 'flow-watch/src/runFlow.js' {
-  declare module.exports: $Exports<'flow-watch/src/runFlow'>;
+  declare module.exports: $Exports<'flow-watch/src/runFlow'>
 }
